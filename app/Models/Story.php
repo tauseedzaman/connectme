@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Story extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        "user_id",
+        "story",
+        "status",
+        "likes",
+        "comment",
+    ];
 }

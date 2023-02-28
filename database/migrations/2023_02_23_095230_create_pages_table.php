@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->uuid("uuid");
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
-            $table->stirng("icon");
-            $table->stirng("thumbnail");
+            $table->string("icon");
+            $table->string("thumbnail");
             $table->text("description")->nullable();
-            $table->stirng("name");
-            $table->stirng("location")->nullable();
-            $table->stirng("type");
+            $table->string("name");
+            $table->string("location")->nullable();
+            $table->string("type");
             $table->unsignedBigInteger("members")->default(0);
             $table->boolean("is_private")->default(0);
             $table->timestamps();

@@ -16,6 +16,8 @@
     <link rel="stylesheet" href=" {{ asset('css/emoji.css') }}">
 
     <link rel="stylesheet" href=" {{ asset('css/lightbox.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
+
     @livewireStyles
 </head>
 
@@ -63,12 +65,23 @@
 
     </div>
 
-    @livewireScripts
 
     <script src="{{ asset('js/plugin.js') }}"></script>
 
     <script src="{{ asset('js/lightbox.js') }}"></script>
     <script src="{{ asset('js/scripts.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    @livewireScripts
+
+    <script>
+             window.addEventListener('alert', event => {
+            toastr[event.detail.type](event.detail.message,
+                event.detail.title ?? ''), toastr.options = {
+                "closeButton": true,
+                "progressBar": true,
+            }
+        });
+    </script>
 </body>
 
 </html>

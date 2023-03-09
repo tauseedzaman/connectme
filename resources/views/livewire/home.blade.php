@@ -241,7 +241,7 @@
                                                         class="rounded-3 w-100" alt="image">
                                                     @if ($loop->index == 2)
                                                         <span
-                                                            class="img-count font-sm text-white ls-3 fw-600"><b>+{{ count($medias) - 3 }}</b></span>
+                                                            class="text-white img-count font-sm ls-3 fw-600"><b>+{{ count($medias) - 3 }}</b></span>
                                                     @endif
                                                 </a>
                                             </div>
@@ -262,10 +262,9 @@
 
                                 </div>
                             </div>
-                            <div class="p-0
-                                        mt-3 card-body d-flex">
+                            <div class="p-0 mt-3 card-body d-flex">
                                 @php
-                                    $like = App\Models\Like::where(['post_id' => $post->id, 'user_id' => auth()->id()])->first();
+                                    $like = App\Models\Like::where(['post_id' => $post->id, 'user_id' => auth()->id()])->exists();
                                 @endphp
                                 @if ($like)
                                     <a href="#" wire:click.prevent="dislike({{ $post->id }})"
@@ -286,7 +285,7 @@
                                     class="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i
                                         class=" text-dark text-grey-900 btn-round-sm font-lg"
                                         style="margin-top: -10px">{!! $icons->getIcon('message-circle') !!}</i><span
-                                        class="d-none-xss">22 Comment</span></a>
+                                        class="d-none-xss">{{ $post->comments }} Comment</span></a>
                                 <a href="#" id="dropdownMenu21" data-bs-toggle="dropdown"
                                     aria-expanded="false"
                                     class="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i
@@ -334,6 +333,9 @@
                                         class="p-2 border-0 bg-grey text-grey-500 font-xssss lh-32 fw-600 rounded-3 w-100 theme-dark-bg">
                                 </div>
                             </div>
+                            <form method="POST" wire:submit.prevent="saveComment({{$post->id}})">
+                                <input type="text" placeholder="write your comments here..." required name="comment" wire:model.lazy="comment" class="p-2 border-0 bg-grey text-grey-500 font-xssss lh-32 fw-600 rounded-3 w-100 theme-dark-bg" id="">
+                            </form>
                         </div>
 
                     @empty

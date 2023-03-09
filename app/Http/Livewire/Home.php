@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Support\Facades\DB;
@@ -10,6 +11,29 @@ use Livewire\Component;
 class Home extends Component
 {
     public $paginate_no = 20;
+    public $comment;
+
+    public function saveComment($post_id)
+    {
+        $this->validate([
+            "comment" => "required|string"
+        ]);
+        DB::beginTransaction();
+        try {
+            Comment::firstOrCreate([
+                "post_id" => $post_id,
+                "comment" => $this->comment,
+                 "user_id" => auth()->id()]);
+            $post = Post::findOrFail($post_id);
+            $post->comments += 1;
+            $post->save();
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+        unset($this->comment);
+    }
 
     public function like($id)
     {

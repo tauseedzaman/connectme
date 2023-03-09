@@ -247,49 +247,41 @@
                                             </div>
                                         @endforeach
                                     @elseif ($post_media && $post_media->file_type == 'video')
-                                    <video
-
-                                            id="my-video"
-                                            class="video-js"
-                                            controls
-                                            preload="auto"
-                                            poster="images/poster-1.png"
-                                            data-setup="{}"
-                                           style="width: 100%; height: auto;">
+                                        <video id="my-video" class="video-js" controls preload="auto"
+                                            poster="images/poster-1.png" data-setup="{}"
+                                            style="width: 100%; height: auto;">
                                             <source src="images/v-2.mp4" type="video/mp4" />
                                             <p class="vjs-no-js">
-                                              To view this video please enable JavaScript, and consider upgrading to a
-                                              web browser that
-                                              <a href="https://videojs.com/html5-video-support/" target="_blank"
-                                                >supports HTML5 video</a
-                                              >
+                                                To view this video please enable JavaScript, and consider upgrading to a
+                                                web browser that
+                                                <a href="https://videojs.com/html5-video-support/"
+                                                    target="_blank">supports HTML5 video</a>
                                             </p>
-                                          </video>
+                                        </video>
                                     @endif
 
                                 </div>
                             </div>
                             <div class="p-0
                                         mt-3 card-body d-flex">
-                                <a href="#"
-                                    class="emoji-bttn d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2"><i
-                                        class="text-white me-2 btn-round-xs font-xss"
-                                        style="margin-top: -10px">{!! $icons->getIcon('thumbs-up') !!}</i>2.8K Like</a>
-                                <div class="emoji-wrap">
-                                    <ul class="mb-0 emojis list-inline">
-                                        <li class="emoji list-inline-item"><i class="em em---1"></i> </li>
-                                        <li class="emoji list-inline-item"><i class="em em-angry"></i></li>
-                                        <li class="emoji list-inline-item"><i class="em em-anguished"></i>
-                                        </li>
-                                        <li class="emoji list-inline-item"><i class="em em-astonished"></i>
-                                        </li>
-                                        <li class="emoji list-inline-item"><i class="em em-blush"></i></li>
-                                        <li class="emoji list-inline-item"><i class="em em-clap"></i></li>
-                                        <li class="emoji list-inline-item"><i class="em em-cry"></i></li>
-                                        <li class="emoji list-inline-item"><i class="em em-full_moon_with_face"></i>
-                                        </li>
-                                    </ul>
-                                </div>
+                                @php
+                                    $like = App\Models\Like::where(['post_id' => $post->id, 'user_id' => auth()->id()])->first();
+                                @endphp
+                                @if ($like)
+                                    <a href="#" wire:click.prevent="dislike({{ $post->id }})"
+                                        class=" d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2"><i
+                                            class="text-white me-2 btn-round-xs font-xss"
+                                            style="margin-top: -10px">{!! $icons->getIcon('thumbs-up', ['fill' => 'yellow']) !!}</i>{{ $post->likes ?? 0 }}
+                                        Like</a>
+                                @else
+                                    <a href="#" wire:click.prevent="like({{ $post->id }})"
+                                        class=" d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss me-2"><i
+                                            class="text-white me-2 btn-round-xs font-xss"
+                                            style="margin-top: -10px">{!! $icons->getIcon('thumbs-up') !!}</i>{{ $post->likes ?? 0 }}
+                                        Like</a>
+                                @endif
+
+
                                 <a href="#"
                                     class="d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i
                                         class=" text-dark text-grey-900 btn-round-sm font-lg"

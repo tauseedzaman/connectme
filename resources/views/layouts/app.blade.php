@@ -16,6 +16,7 @@
     <link rel="stylesheet" href=" {{ asset('css/emoji.css') }}">
 
     <link rel="stylesheet" href=" {{ asset('css/lightbox.css') }}">
+    <link rel="stylesheet" href="{{ asset("css/video-player.css") }}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 
     @livewireStyles
@@ -70,6 +71,7 @@
 
     <script src="{{ asset('js/lightbox.js') }}"></script>
     <script src="{{ asset('js/scripts.js') }}"></script>
+    <script src="{{ asset("js/video-player.js")}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     @livewireScripts
 

@@ -114,9 +114,9 @@
                                         @endforeach
                                     @elseif ($post_media && $post_media->file_type == 'video')
                                         <video id="my-video" class="video-js" controls preload="auto"
-                                            poster="images/poster-1.png" data-setup="{}"
-                                            style="width: 100%; height: auto;">
-                                            <source src="images/v-2.mp4" type="video/mp4" />
+                                         data-setup="{}"
+                                            width="100%" height="100%">
+                                            <source src="{{ asset("storage")."/".$post_media->file }}" type="video/mp4" />
                                             <p class="vjs-no-js">
                                                 To view this video please enable JavaScript, and consider upgrading to a
                                                 web browser that

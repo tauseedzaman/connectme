@@ -26,13 +26,14 @@
                 class="pt-2 pb-2 border-0 bg-grey lh-32 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg">
         </div>
     </form>
-    <a href="#" class="p-2 text-center ms-3 menu-icon center-menu-icon"><i
-            class="text-current font-lg alert-primary btn-round-lg theme-dark-bg "style="margin-top: -10px">{!! $icons->getIcon('home') !!}</i></a>
+    <a href="{{ url("/") }}" class="  p-2 text-center ms-0 menu-icon center-menu-icon"><i
+            class=" {{ request()->route()->getName()=="home" ? "bg-primary":"" }} font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"
+            style="margin-top: -10px">{!! $icons->getIcon('home') !!}</i></a>
     <a href="#" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i
             class=" font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"
             style="margin-top: -10px">{!! $icons->getIcon('zap') !!}</i></a>
-    <a href="#" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i
-            class=" font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"
+    <a href="{{ route('videos') }}" class="   p-2 text-center ms-0 menu-icon center-menu-icon"><i
+            class="{{ request()->route()->getName()=="videos" ? "bg-primary":"" }} font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"
             style="margin-top: -10px">{!! $icons->getIcon('video') !!}</i></a>
     <a href="#" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i
             class=" font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"
@@ -183,7 +184,7 @@
 
 
     <a href="#" class="p-0 ms-3 menu-icon"><img
-            src="{{  auth()->user()->profile ? asset('storage').'/'. auth()->user()->profile : 'images/profile-4.png' }}" alt="user"
-            class="w40 mt--1"></a>
+            src="{{ auth()->user()->profile ? asset('storage') . '/' . auth()->user()->profile : 'images/profile-4.png' }}"
+            alt="user" class="w40 mt--1"></a>
 
 </div>

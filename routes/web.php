@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Livewire\Home;
+use App\Http\Livewire\SinglePost;
 use App\Models\Post;
 use Illuminate\Support\Facades\Route;
 
@@ -17,8 +18,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-
-Route::get('/', Home::class)->middleware(["auth", "verified", 'VerifiedUser']);
+Route::middleware(["auth", "verified", 'VerifiedUser'])->group(function () {
+    Route::get('/', Home::class);
+    Route::get('/post/{useruuid}/{postuuid}', SinglePost::class)->name("single-post");
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');

@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             'last_name' => "zaman",
             'username' => "tauseedzaman",
             'gender' => "male",
-            'profile' => "",
+            'profile' => "profiles/2fMcpEJI6Ybd4DcKZinpOnngxEDmUnGHfzQnJJdY.png",
             'email' => "tauseedzaman@connectme.com",
             'mobile' => "",
             'password' => Hash::make("password"),

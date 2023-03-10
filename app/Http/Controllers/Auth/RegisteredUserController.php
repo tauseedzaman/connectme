@@ -44,7 +44,7 @@ class RegisteredUserController extends Controller
 
         $profile = "";
         if ($request->file("profile")) {
-            $profile = $request->file("profile")->store("profiles");
+            $profile = $request->file("profile")->store("profiles","public");
         }
         $user = User::create([
             'uuid'=>Str::uuid(),

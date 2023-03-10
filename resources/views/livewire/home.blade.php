@@ -178,7 +178,7 @@
                     @forelse ($posts as $post)
                         <div class="p-4 mb-3 border-0 card w-100 shadow-xss rounded-xxl">
                             <div class="p-0 card-body d-flex">
-                                <figure class="avatar me-3"><img src="images/user-7.png" alt="image"
+                                <figure class="avatar me-3"><img src="{{$post->user->profile ?? 'images/user-7.png'}}" alt="image"
                                         class="shadow-sm rounded-circle w45"></figure>
                                 <h4 class="mt-1 fw-700 text-grey-900 font-xssss">{{ $post->user->username }} <span
                                         class="mt-1 d-block font-xssss fw-500 lh-3 text-grey-500">{{ $post->created_at->diffForHumans() }}</span>
@@ -215,7 +215,9 @@
                                 </div>
                             </div>
                             <div class="p-0 card-body me-lg-5">
+                                <a href="{{ route("single-post",["useruuid"=>$post->user->uuid,"postuuid"=>$post->uuid]) }}">
                                 <p class="fw-500 text-grey-500 lh-26 font-xssss w-100">{{ $post->content }}</p>
+                            </a>
                             </div>
                             <div class="p-0 card-body d-block">
                                 <div class="row ps-2 pe-2">
@@ -329,7 +331,7 @@
                                     <h4 class="mt-4 mb-3 fw-700 font-xssss text-grey-500 d-flex align-items-center">
                                         Copy Link</h4>
                                     {{-- <i class="mt-3 position-absolute right-35 font-xs text-grey-500" style="">{!! $icons->getIcon("copy")  !!}</i> --}}
-                                    <input type="text" value="https://socia.be/1rGxjoJKVF0"
+                                    <input type="text" value="{{ route("single-post",["useruuid"=>$post->user->uuid,"postuuid"=>$post->uuid]) }}"
                                         class="p-2 border-0 bg-grey text-grey-500 font-xssss lh-32 fw-600 rounded-3 w-100 theme-dark-bg">
                                 </div>
                             </div>

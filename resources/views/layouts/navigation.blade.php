@@ -183,7 +183,7 @@
 
 
     <a href="#" class="p-0 ms-3 menu-icon"><img
-            src="{{ auth()->user()->profile ? auth()->user()->profile : 'images/profile-4.png' }}" alt="user"
+            src="{{  auth()->user()->profile ? asset('storage').'/'. auth()->user()->profile : 'images/profile-4.png' }}" alt="user"
             class="w40 mt--1"></a>
 
 </div>

@@ -110,24 +110,24 @@
                             <ul class="nav nav-tabs h55 d-flex product-info-tab border-bottom-0 ps-4" id="pills-tab"
                                 role="tablist">
                                 <li class="active list-inline-item me-5"><a
-                                        class="pt-3 pb-3 fw-700 font-xssss text-grey-500 ls-1 d-inline-block active"
+                                        class="pt-3 pb-3 fw-700 font-xssss text-grey-500 ls-1 d-inline-block "
                                         href="#navtabs1" wire:click="toggle">About</a></li>
 
                                 {{-- <li class="list-inline-item me-5"><a
-                                        class="pt-3 pb-3 fw-700 font-xssss text-grey-500 ls-1 d-inline-block"
-                                        href="#navtabs4" data-toggle="tab">Video</a></li> --}}
+                                    class="pt-3 pb-3 fw-700 font-xssss text-grey-500 ls-1 d-inline-block"
+                                    href="#navtabs4" data-toggle="tab">Video</a></li> --}}
                                 {{-- <li class="list-inline-item me-5"><a
-                                        class="pt-3 pb-3 fw-700 font-xssss text-grey-500 ls-1 d-inline-block"
-                                        href="#navtabs3" data-toggle="tab">Group</a></li> --}}
+                                    class="pt-3 pb-3 fw-700 font-xssss text-grey-500 ls-1 d-inline-block"
+                                    href="#navtabs3" data-toggle="tab">Group</a></li> --}}
 
                                 <li class="list-inline-item me-5"><a href="#" wire:click="toggle"
-                                        class="pt-3 pb-3 fw-700 me-sm-5 font-xssss text-grey-500 ls-1 d-inline-block"
-                                        >Media</a></li>
+                                        class="pt-3 pb-3 fw-700 me-sm-5 font-xssss text-grey-500 ls-1 d-inline-block active">Media</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="col-xl-4 col-xxl-3 col-lg-4 pe-0">
+                {{-- <div class="col-xl-4 col-xxl-3 col-lg-4 pe-0">
                     <div class="mb-3 border-0 card w-100 shadow-xss rounded-xxl">
                         <div class="p-4 card-body d-block">
                             <h4 class="mb-3 fw-700 font-xsss text-grey-900">About</h4>
@@ -166,8 +166,8 @@
                         </div>
                     </div>
 
-                </div>
-                <div class="col-xl-8 col-xxl-9 col-lg-8">
+                </div> --}}
+                <div class="col-12">
 
                     @forelse ($posts as $post)
                         <div class="p-4 mb-3 border-0 card w-100 shadow-xss rounded-xxl">
@@ -245,8 +245,8 @@
                                             </div>
                                         @endforeach
                                     @elseif ($post_media && $post_media->file_type == 'video')
-                                        <video id="my-video" class="video-js" controls preload="auto"
-                                            data-setup="{}" width="100%" height="100%">
+                                        <video id="my-video" class="video-js" controls preload="auto" data-setup="{}"
+                                            width="100%" height="100%">
                                             <source src="{{ asset('storage') . '/' . $post_media->file }}"
                                                 type="video/mp4" />
                                             <p class="vjs-no-js">

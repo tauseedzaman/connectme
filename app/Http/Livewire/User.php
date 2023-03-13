@@ -13,9 +13,15 @@ use Livewire\Component;
 class User extends Component
 {
     public $uuid;
+    public $loader;
 
     public $paginate_no = 20;
     public $comment;
+
+    public function toggle()
+    {
+        $this->loader=!$this->loader;
+    }
 
     public function saveComment($post_id)
     {
@@ -73,18 +79,27 @@ class User extends Component
     public function mount($uuid)
     {
         $this->uuid = $uuid;
+        $this->loader = 1;
     }
 
     public function render()
     {
-        $user=ModelsUser::where("uuid", $this->uuid)->firstOrFail();
-        $posts_ids=Post::where("user_id",$user->id)->pluck("id");
-        $posts=Post::where("user_id",$user->id)->get();
-        $post_media=PostMedia::whereIn("post_id",$posts_ids)->where("file_type","image")->get();
-        return view('livewire.user', [
-            "user" => $user,
-            "posts" => $posts,
-            "post_media" => $post_media
-        ])->extends("layouts.app");
+        $user = ModelsUser::where("uuid", $this->uuid)->firstOrFail();
+        $posts_ids = Post::where("user_id", $user->id)->pluck("id");
+        if ($this->loader == 1) {
+            $posts = Post::where("user_id", $user->id)->get();
+            $post_media = PostMedia::whereIn("post_id", $posts_ids)->where("file_type", "image")->get();
+            return view('livewire.user', [
+                "user" => $user,
+                "posts" => $posts,
+                "post_media" => $post_media
+            ])->extends("layouts.app");
+        } else {
+            $posts_media = PostMedia::whereIn("post_id", $posts_ids)->pluck("post_id");
+            return view('livewire.user-media', [
+                "user" => $user,
+                "posts" => Post::whereIn("id", $posts_media)->get(),
+            ])->extends("layouts.app");
+        }
     }
 }

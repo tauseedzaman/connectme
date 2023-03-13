@@ -3,9 +3,12 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Livewire\Home;
 use App\Http\Livewire\Peoples;
+use App\Http\Livewire\Profile;
 use App\Http\Livewire\SinglePost;
+use App\Http\Livewire\User;
 use App\Http\Livewire\VideoPosts;
 use App\Models\Post;
+use Illuminate\Support\Benchmark;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,10 +22,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::middleware(["auth", "verified", 'VerifiedUser'])->group(function () {
     Route::get('/', Home::class)->name("home");
     Route::get('/videos', VideoPosts::class)->name("videos");
+    // Route::get('/profile/', Profile::class)->name("profile");
+    Route::get('/user/{uuid}', User::class)->name("user");
     Route::get('/explore', Peoples::class)->name("explore");
     Route::get('/post/{useruuid}/{postuuid}', SinglePost::class)->name("single-post");
 });

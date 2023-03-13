@@ -3,8 +3,11 @@
 namespace App\Http\Livewire;
 
 use App\Models\Comment;
+use App\Models\Friend;
 use App\Models\Like;
+use App\Models\Notification;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -23,7 +26,8 @@ class Home extends Component
             Comment::firstOrCreate([
                 "post_id" => $post_id,
                 "comment" => $this->comment,
-                 "user_id" => auth()->id()]);
+                "user_id" => auth()->id()
+            ]);
             $post = Post::findOrFail($post_id);
             $post->comments += 1;
             $post->save();
@@ -65,11 +69,83 @@ class Home extends Component
         }
     }
 
+    public function acceptfriend($id)
+    {
+        $user = User::where("id", $id)->first();
+
+        DB::beginTransaction();
+        try {
+            $req = Friend::where([
+                "user_id" => $id,
+                "friend_id" => auth()->id(),
+            ])->first();
+            $req->status = "accepted";
+            $req->save();
+            Notification::create([
+                "type" => "friend_accepted",
+                "user_id" => $user->id,
+                "message" => auth()->user()->username . " accepted your friend request",
+                "url" => "#",
+            ]);
+
+            // Notification::create([
+            //     "type" => "friend_accepted",
+            //     "user_id" => $user->id,
+            //     "message" => " accepted your friend request" . $user->username,
+            //     "url" => "#",
+            // ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+        $this->dispatchBrowserEvent('alert', [
+            "type" => "success", "message" =>  "  friend request accepted "
+        ]);
+    }
+
+    public function rejectfriend($id)
+    {
+        $user = User::where("id", $id)->first();
+
+        DB::beginTransaction();
+        try {
+            $req = Friend::where([
+                "user_id" => $id,
+                "friend_id" => auth()->id(),
+            ])->first();
+            $req->status = "rejected";
+            $req->save();
+            Notification::create([
+                "type" => "friend_rejected",
+                "user_id" => $user->id,
+                "message" => auth()->user()->username . " rejected your friend request",
+                "url" => "#",
+            ]);
+
+            // Notification::create([
+            //     "type" => "friend_accepted",
+            //     "user_id" => $user->id,
+            //     "message" => " accepted your friend request" . $user->username,
+            //     "url" => "#",
+            // ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+        $this->dispatchBrowserEvent('alert', [
+            "type" => "success", "message" =>  "  friend request rejected "
+        ]);
+    }
 
     public function render()
     {
         return view('livewire.home', [
-            'posts' => Post::with("user")->latest()->paginate($this->paginate_no)
+            'posts' => Post::with("user")->latest()->paginate($this->paginate_no),
+            'friend_requests' => Friend::where(["friend_id" => auth()->id(), "status" => "pending"])->with("user")->latest()->take(5)->get()
         ])->extends("layouts.app");
     }
 }
+
+

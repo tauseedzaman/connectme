@@ -1,43 +1,175 @@
+<!-- main content -->
 <div class="main-content right-chat-active">
-    <?php
-    $icons = new \Feather\IconManager();
-    ?>
+    @php
+        $icons = new \Feather\IconManager();
+        $icons->setSize(14);
+    @endphp
     <div class="middle-sidebar-bottom">
         <div class="middle-sidebar-left">
-            <!-- loader wrapper -->
-            <div class="p-3 preloader-wrap">
-                <div class="box shimmer">
-                    <div class="lines">
-                        <div class="line s_shimmer"></div>
-                        <div class="line s_shimmer"></div>
-                        <div class="line s_shimmer"></div>
-                        <div class="line s_shimmer"></div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="mt-3 mb-3 overflow-hidden border-0 card w-100 shadow-xss rounded-xxl">
+                        <div class="card-body position-relative h240 bg-image-cover bg-image-center"
+                            style="background-image: url({{ $user->thumbnial ? asset('storage') . '/' . $user->thumbnial : config('app.url') . '/' . 'images/bb-9.jpg' }});">
+                        </div>
+                        <div class="pt-4 text-center card-body d-block position-relative">
+                            <figure class="avatar mt--6 position-relative w75 z-index-1 w100 ms-auto me-auto"><img
+                                    src="{{ $user->profile ? asset('storage') . '/' . $user->profile : config('app.url') . '/' . 'images/pt-1.jpg' }}"
+                                    alt="image" class="p-1 bg-white rounded-xl w-100"></figure>
+
+                            <h4 class="font-xs ls-1 fw-700 text-grey-900">
+                                {{ $user->first_name . ' ' . $user->last_name }}
+                                <span
+                                    class="mt-1 d-block font-xssss fw-500 lh-3 text-grey-500">{{ '@' . $user->username }}</span>
+                            </h4>
+                            <div class="pt-0 mt-4 d-flex align-items-center position-absolute left-15 top-10 ms-2">
+                                <h4 class="text-center font-xsssss d-none d-lg-block text-grey-500 fw-600 ms-2 me-2"><b
+                                        class="mb-1 text-grey-900 font-sm fw-700 d-inline-block ls-3 text-dark">{{ App\Models\Post::where('user_id', $user->id)->count() ?? 0 }}
+                                    </b>
+                                    Posts</h4>
+                                <h4 class="text-center font-xsssss d-none d-lg-block text-grey-500 fw-600 ms-2 me-2"><b
+                                        class="mb-1 text-grey-900 font-sm fw-700 d-inline-block ls-3 text-dark">
+                                        {{ App\Models\Friend::where(['user_id' => $user->id, 'status' => 'appected'])->orWhere(['friend_id' => $user->id, 'status' => 'appected'])->count() ?? 0 }}
+                                    </b> Friends</h4>
+                                {{-- <h4 class="text-center font-xsssss d-none d-lg-block text-grey-500 fw-600 ms-2 me-2"><b
+                                        class="mb-1 text-grey-900 font-sm fw-700 d-inline-block ls-3 text-dark">32k </b>
+                                    Follow</h4> --}}
+                            </div>
+                            <div
+                                class="mt-2 d-flex align-items-center justify-content-center position-absolute right-15 top-10 me-2">
+                                @if (auth()->id() == $user->id)
+                                    <a href="#"
+                                        class="p-3 text-white bg-primary d-none d-lg-block z-index-1 rounded-3 font-xsssss text-uppercase fw-700 ls-3">Edit</a>
+                                @elseif (App\Models\Friend::Where([
+                                    'friend_id' => auth()->id(),
+                                    'user_id' => $user->id,
+                                    'status' => 'pending',
+                                ])->exists())
+                                    <button wire:click="acceptfriend('{{ $user->id }}')"
+                                        class="p-3 text-white bg-primary d-none d-lg-block z-index-1 rounded-3 font-xsssss text-uppercase fw-700 ls-3">ACCEPT</button>
+                                @elseif (App\Models\Friend::Where([
+                                    'friend_id' => $user->id,
+                                    'user_id' => auth()->id(),
+                                    'status' => 'pending',
+                                ])->exists())
+                                    <button wire:click="removefriend('{{ $user->uuid }}')"
+                                        class="p-3 text-white bg-warning d-none d-lg-block z-index-1 rounded-3 font-xsssss text-uppercase fw-700 ls-3">CANCEL</button>
+                                @elseif (App\Models\Friend::Where([
+                                    'friend_id' => auth()->id(),
+                                    'user_id' => $user->id,
+                                    'status' => 'rejected',
+                                ])->exists())
+                                    <button wire:click="addfriend('{{ $user->uuid }}')"
+                                        class="p-3 text-white bg-success d-none d-lg-block z-index-1 rounded-3 font-xsssss text-uppercase fw-700 ls-3">ADD
+                                        FRIEND</button>
+                                @elseif ($user->is_friend() == 'accepted')
+                                    <button
+                                        class="p-3 text-white bg-info d-none d-lg-block z-index-1 rounded-3 font-xsssss text-uppercase fw-700 ls-3">FRIEND</button>
+                                @else
+                                    <button wire:click="addfriend('{{ $user->uuid }}')"
+                                        class="p-3 text-white bg-success d-none d-lg-block z-index-1 rounded-3 font-xsssss text-uppercase fw-700 ls-3">ADD
+                                        FRIEND</button>
+                                @endif
+                                <a href="#"
+                                    class="d-none d-lg-block bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700"><i
+                                        class=" font-md" style="margin-top: -10px">{!! $icons->getIcon('mail') !!}</i></a>
+                                {{-- <a href="#" id="dropdownMenu8"
+                                    class="d-none d-lg-block btn-round-lg ms-2 rounded-3 text-grey-700 bg-greylight"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
+                                        class="ti-more font-md"></i></a>
+                                <div class="p-4 border-0 shadow-lg dropdown-menu dropdown-menu-end rounded-xxl"
+                                    aria-labelledby="dropdownMenu8">
+                                    <div class="p-0 card-body d-flex">
+                                        <i class="feather-bookmark text-grey-500 me-3 font-lg"></i>
+                                        <h4 class="mt-0 fw-600 text-grey-900 font-xssss me-0">Save Link <span
+                                                class="mt-1 d-block font-xsssss fw-500 lh-3 text-grey-500">Add this to
+                                                your saved items</span></h4>
+                                    </div>
+                                    <div class="p-0 mt-2 card-body d-flex">
+                                        <i class="feather-alert-circle text-grey-500 me-3 font-lg"></i>
+                                        <h4 class="mt-0 fw-600 text-grey-900 font-xssss me-0">Hide Post <span
+                                                class="mt-1 d-block font-xsssss fw-500 lh-3 text-grey-500">Save to your
+                                                saved items</span></h4>
+                                    </div>
+                                    <div class="p-0 mt-2 card-body d-flex">
+                                        <i class="feather-alert-octagon text-grey-500 me-3 font-lg"></i>
+                                        <h4 class="mt-0 fw-600 text-grey-900 font-xssss me-0">Hide all from Group <span
+                                                class="mt-1 d-block font-xsssss fw-500 lh-3 text-grey-500">Save to your
+                                                saved items</span></h4>
+                                    </div>
+                                    <div class="p-0 mt-2 card-body d-flex">
+                                        <i class="feather-lock text-grey-500 me-3 font-lg"></i>
+                                        <h4 class="mt-0 mb-0 fw-600 text-grey-900 font-xssss me-0">Unfollow Group <span
+                                                class="mt-1 d-block font-xsssss fw-500 lh-3 text-grey-500">Save to your
+                                                saved items</span></h4>
+                                    </div>
+                                </div> --}}
+                            </div>
+                        </div>
+
+                        <div class="p-0 mb-0 shadow-none card-body d-block w-100 border-top-xs">
+                            <ul class="nav nav-tabs h55 d-flex product-info-tab border-bottom-0 ps-4" id="pills-tab"
+                                role="tablist">
+                                <li class="active list-inline-item me-5"><a
+                                        class="pt-3 pb-3 fw-700 font-xssss text-grey-500 ls-1 d-inline-block active"
+                                        href="#navtabs1" data-toggle="tab">About</a></li>
+
+                                {{-- <li class="list-inline-item me-5"><a
+                                        class="pt-3 pb-3 fw-700 font-xssss text-grey-500 ls-1 d-inline-block"
+                                        href="#navtabs4" data-toggle="tab">Video</a></li> --}}
+                                <li class="list-inline-item me-5"><a
+                                        class="pt-3 pb-3 fw-700 font-xssss text-grey-500 ls-1 d-inline-block"
+                                        href="#navtabs3" data-toggle="tab">Group</a></li>
+
+                                <li class="list-inline-item me-5"><a
+                                        class="pt-3 pb-3 fw-700 me-sm-5 font-xssss text-grey-500 ls-1 d-inline-block"
+                                        href="#navtabs7" data-toggle="tab">Media</a></li>
+                                <li class="mt-3 list-inline-item ms-auto me-4"><a href="#" class=""><i
+                                            class="ti-more-alt text-grey-500 font-xs"></i></a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                <div class="mb-3 box shimmer">
-                    <div class="lines">
-                        <div class="line s_shimmer"></div>
-                        <div class="line s_shimmer"></div>
-                        <div class="line s_shimmer"></div>
-                        <div class="line s_shimmer"></div>
+                <div class="col-xl-4 col-xxl-3 col-lg-4 pe-0">
+                    <div class="mb-3 border-0 card w-100 shadow-xss rounded-xxl">
+                        <div class="p-4 card-body d-block">
+                            <h4 class="mb-3 fw-700 font-xsss text-grey-900">About</h4>
+                            <p class="mb-0 fw-500 text-grey-500 lh-24 font-xssss">{{ $user->description ?? '...' }}</p>
+                        </div>
+
+
+
+                        <div class="pt-0 card-body d-flex">
+                            <i class=" text-grey-500 me-3 font-lg">{!! $icons->getIcon('map-pin') !!}</i>
+                            <h4 class="mt-1 fw-700 text-grey-900 font-xssss">{{ $user->location ?? '..' }} </h4>
+                        </div>
+
                     </div>
-                </div>
-                <div class="box shimmer">
-                    <div class="lines">
-                        <div class="line s_shimmer"></div>
-                        <div class="line s_shimmer"></div>
-                        <div class="line s_shimmer"></div>
-                        <div class="line s_shimmer"></div>
+                    <div class="mb-3 border-0 card w-100 shadow-xss rounded-xxl">
+                        <div class="p-4 card-body d-flex align-items-center">
+                            <h4 class="mb-0 fw-700 font-xssss text-grey-900">Photos</h4>
+                            <a href="#" class="fw-600 ms-auto font-xssss text-primary">See all</a>
+                        </div>
+                        <div class="pt-0 pb-2 card-body d-block">
+                            <div class="row">
+                                @foreach ($post_media as $image)
+                                    <div class="mb-2 col-6 pe-1"><a href="{{ asset('storage') . '/' . json_decode($image->file)[0] }}"
+                                            data-lightbox="roadtrip"><img
+                                                src="{{ asset('storage') . '/' . json_decode($image->file)[0] }}" alt="image"
+                                                class="img-fluid rounded-3 w-100"></a>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        <div class="pt-0 card-body d-block w-100">
+                            <a href="#"
+                                class="p-2 text-center lh-28 w-100 d-block bg-grey text-grey-800 font-xssss fw-700 rounded-xl"><i
+                                    class=" font-xss me-2">{!! $icons->getIcon("external-link") !!}</i> More</a>
+                        </div>
                     </div>
+
                 </div>
-            </div>
-            <!-- loader wrapper -->
-            <div class="row feed-body">
                 <div class="col-xl-8 col-xxl-9 col-lg-8">
-
-                    @livewire('components.stories')
-                    @livewire('components.create-post')
-
 
                     @forelse ($posts as $post)
                         <div class="p-4 mb-3 border-0 card w-100 shadow-xss rounded-xxl">
@@ -102,7 +234,8 @@
                                             @endif
                                             <div
                                                 class=" p-1 {{ count($medias) == 1 ? 'col-12' : 'col-xs-4 col-sm-4' }} ">
-                                                <a href="{{ asset('storage') . '/' . $media }}" data-lightbox="roadtrip"
+                                                <a href="{{ asset('storage') . '/' . $media }}"
+                                                    data-lightbox="roadtrip"
                                                     class="{{ $loop->index == 2 ? 'position-relative d-block' : '' }}"><img
                                                         src="{{ asset('storage') . '/' . $media }}"
                                                         class="rounded-3 w-100" alt="image">
@@ -114,8 +247,8 @@
                                             </div>
                                         @endforeach
                                     @elseif ($post_media && $post_media->file_type == 'video')
-                                        <video id="my-video" class="video-js" controls preload="auto" data-setup="{}"
-                                            width="100%" height="100%">
+                                        <video id="my-video" class="video-js" controls preload="auto"
+                                            data-setup="{}" width="100%" height="100%">
                                             <source src="{{ asset('storage') . '/' . $post_media->file }}"
                                                 type="video/mp4" />
                                             <p class="vjs-no-js">
@@ -153,7 +286,8 @@
                                         class=" text-dark text-grey-900 btn-round-sm font-lg"
                                         style="margin-top: -10px">{!! $icons->getIcon('message-circle') !!}</i><span
                                         class="d-none-xss">{{ $post->comments }} Comment</span></a>
-                                <a href="#" id="dropdownMenu21" data-bs-toggle="dropdown" aria-expanded="false"
+                                <a href="#" id="dropdownMenu21" data-bs-toggle="dropdown"
+                                    aria-expanded="false"
                                     class="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i
                                         class=" text-grey-900 text-dark btn-round-sm font-lg"
                                         style="margin-top: -10px">{!! $icons->getIcon('share-2') !!} </i><span
@@ -222,171 +356,10 @@
                         </div>
                     </div>
 
-
-                </div>
-                <div class="col-xl-4 col-xxl-3 col-lg-4 ps-lg-0">
-                    @if (count($friend_requests))
-                        <div class="mb-3 border-0 card w-100 shadow-xss rounded-xxl">
-                            <div class="p-4 card-body d-flex align-items-center">
-                                <h4 class="mb-0 fw-700 font-xssss text-grey-900">Friend Request</h4>
-                                <a href="{{ route('explore') }}" class="fw-600 ms-auto font-xssss text-primary">See
-                                    all</a>
-                            </div>
-                            @forelse ($friend_requests as $user)
-                                <div class="pt-4 pb-0 card-body d-flex ps-4 pe-4 border-top-xs bor-0">
-                                    <figure class="avatar me-3"><img
-                                            src="{{ asset('storage') . '/' . $user->user->profile }}" alt="image"
-                                            class="shadow-sm rounded-circle w45"></figure>
-                                    <h4 class="mt-1 fw-700 text-grey-900 font-xssss">
-                                        {{ $user->user->first_name . ' ' . $user->user->last_name }} <span
-                                            class="mt-1 d-block font-xssss fw-500 lh-3 text-grey-500">12 mutual
-                                            friends</span>
-                                    </h4>
-                                </div>
-                                <div class="pt-0 pb-4 card-body d-flex align-items-center ps-4 pe-4">
-                                    <button wire:click="acceptfriend({{ $user->user_id }})"
-                                        class="p-2 text-center text-white lh-20 w100 bg-primary-gradiant me-2 font-xssss fw-600 ls-1 rounded-xl">Confirm</button>
-                                    <button wire:click="rejectfriend({{ $user->user_id }})"
-                                        class="p-2 text-center lh-20 w100 bg-grey text-grey-800 font-xssss fw-600 ls-1 rounded-xl">Delete</button>
-                                </div>
-                            @empty
-                            @endforelse
-
-                        </div>
-                    @endif
-
-                    <div class="p-0 border-0 card w-100 shadow-xss rounded-xxl ">
-                        <div class="p-4 mb-0 card-body d-flex align-items-center">
-                            <h4 class="mb-0 fw-700 font-xssss text-grey-900">Confirm Friend</h4>
-                            <a href="default-member.html" class="fw-600 ms-auto font-xssss text-primary">See all</a>
-                        </div>
-                        <div class="p-3 card-body bg-transparent-card d-flex bg-greylight ms-3 me-3 rounded-3">
-                            <figure class="mb-0 avatar me-2"><img src="images/user-7.png" alt="image"
-                                    class="shadow-sm rounded-circle w45"></figure>
-                            <h4 class="mt-2 fw-700 text-grey-900 font-xssss">Anthony Daugloi <span
-                                    class="mt-1 d-block font-xssss fw-500 lh-3 text-grey-500">12 mutual friends</span>
-                            </h4>
-                            <a href="#"
-                                class="mt-2 bg-white btn-round-sm text-grey-900 feather-chevron-right font-xss ms-auto"></a>
-                        </div>
-                        <div class="p-3 m-3 card-body bg-transparent-card d-flex bg-greylight rounded-3"
-                            style="margin-bottom: 0 !important;">
-                            <figure class="mb-0 avatar me-2"><img src="images/user-8.png" alt="image"
-                                    class="shadow-sm rounded-circle w45"></figure>
-                            <h4 class="mt-2 fw-700 text-grey-900 font-xssss"> David Agfree <span
-                                    class="mt-1 d-block font-xssss fw-500 lh-3 text-grey-500">12 mutual friends</span>
-                            </h4>
-                            <a href="#"
-                                class="mt-2 bg-white btn-round-sm text-grey-900 feather-plus font-xss ms-auto"></a>
-                        </div>
-                        <div class="p-3 m-3 card-body bg-transparent-card d-flex bg-greylight rounded-3">
-                            <figure class="mb-0 avatar me-2"><img src="images/user-12.png" alt="image"
-                                    class="shadow-sm rounded-circle w45"></figure>
-                            <h4 class="mt-2 fw-700 text-grey-900 font-xssss">Hugury Daugloi <span
-                                    class="mt-1 d-block font-xssss fw-500 lh-3 text-grey-500">12 mutual friends</span>
-                            </h4>
-                            <a href="#"
-                                class="mt-2 bg-white btn-round-sm text-grey-900 feather-plus font-xss ms-auto"></a>
-                        </div>
-
-                    </div>
-
-                    <div class="mt-3 mb-3 border-0 card w-100 shadow-xss rounded-xxl">
-                        <div class="p-4 card-body d-flex align-items-center">
-                            <h4 class="mb-0 fw-700 font-xssss text-grey-900">Suggest Group</h4>
-                            <a href="default-group.html" class="fw-600 ms-auto font-xssss text-primary">See all</a>
-                        </div>
-                        <div class="pt-4 pb-0 overflow-hidden card-body d-flex ps-4 pe-4 border-top-xs bor-0">
-                            <img src="images/e-2.jpg" alt="img" class="mb-2 img-fluid rounded-xxl">
-                        </div>
-                        <div class="pt-0 pb-4 card-body dd-block ps-4 pe-4">
-                            <ul class="mt-1 mb-2 memberlist ms-0 d-block">
-                                <li class="w20"><a href="#"><img src="images/user-6.png" alt="user"
-                                            class="w35 d-inline-block" style="opacity: 1;"></a></li>
-                                <li class="w20"><a href="#"><img src="images/user-7.png" alt="user"
-                                            class="w35 d-inline-block" style="opacity: 1;"></a></li>
-                                <li class="w20"><a href="#"><img src="images/user-8.png" alt="user"
-                                            class="w35 d-inline-block" style="opacity: 1;"></a></li>
-                                <li class="w20"><a href="#"><img src="images/user-3.png" alt="user"
-                                            class="w35 d-inline-block" style="opacity: 1;"></a></li>
-                                <li class="last-member"><a href="#"
-                                        class="text-center bg-greylight fw-600 text-grey-500 font-xssss w35 ls-3"
-                                        style="height: 35px; line-height: 35px;">+2</a></li>
-                                <li class="w-auto ps-3 ms-1"><a href="#"
-                                        class="fw-600 text-grey-500 font-xssss">Member apply</a></li>
-                            </ul>
-                        </div>
-
-
-
-                    </div>
-
-                    <div class="mb-3 border-0 card w-100 shadow-xss rounded-xxl">
-                        <div class="p-4 card-body d-flex align-items-center">
-                            <h4 class="mb-0 fw-700 font-xssss text-grey-900">Suggest Pages</h4>
-                            <a href="default-group.html" class="fw-600 ms-auto font-xssss text-primary">See all</a>
-                        </div>
-                        <div class="pt-4 pb-0 overflow-hidden card-body d-flex ps-4 pe-4 border-top-xs bor-0">
-                            <img src="images/g-2.jpg" alt="img" class="mb-2 img-fluid rounded-xxl">
-                        </div>
-                        <div class="pt-0 pb-4 card-body d-flex align-items-center ps-4 pe-4">
-                            <a href="#"
-                                class="p-2 text-center lh-28 w-100 bg-grey text-grey-800 font-xssss fw-700 rounded-xl"><i
-                                    class="feather-external-link font-xss me-2"></i> Like Page</a>
-                        </div>
-
-                        <div class="pt-0 pb-0 overflow-hidden card-body d-flex ps-4 pe-4">
-                            <img src="images/g-3.jpg" alt="img" class="mb-2 img-fluid rounded-xxl bg-lightblue">
-                        </div>
-                        <div class="pt-0 pb-4 card-body d-flex align-items-center ps-4 pe-4">
-                            <a href="#"
-                                class="p-2 text-center lh-28 w-100 bg-grey text-grey-800 font-xssss fw-700 rounded-xl"><i
-                                    class="feather-external-link font-xss me-2"></i> Like Page</a>
-                        </div>
-
-
-                    </div>
-
-
-                    <div class="mb-3 border-0 card w-100 shadow-xss rounded-xxl">
-                        <div class="p-4 card-body d-flex align-items-center">
-                            <h4 class="mb-0 fw-700 font-xssss text-grey-900">Event</h4>
-                            <a href="default-event.html" class="fw-600 ms-auto font-xssss text-primary">See all</a>
-                        </div>
-                        <div class="pt-0 pb-3 overflow-hidden card-body d-flex ps-4 pe-4">
-                            <div class="p-3 bg-success me-2 rounded-xxl">
-                                <h4 class="mb-0 text-white fw-700 font-lg ls-3 lh-1"><span
-                                        class="text-white ls-1 d-block font-xsss fw-600">FEB</span>22</h4>
-                            </div>
-                            <h4 class="mt-2 fw-700 text-grey-900 font-xssss">Meeting with clients <span
-                                    class="mt-1 d-block font-xsssss fw-500 lh-4 text-grey-500">41 madison ave, floor 24
-                                    new work, NY 10010</span> </h4>
-                        </div>
-
-                        <div class="pt-0 pb-3 overflow-hidden card-body d-flex ps-4 pe-4">
-                            <div class="p-3 bg-warning me-2 rounded-xxl">
-                                <h4 class="mb-0 text-white fw-700 font-lg ls-3 lh-1"><span
-                                        class="text-white ls-1 d-block font-xsss fw-600">APR</span>30</h4>
-                            </div>
-                            <h4 class="mt-2 fw-700 text-grey-900 font-xssss">Developer Programe <span
-                                    class="mt-1 d-block font-xsssss fw-500 lh-4 text-grey-500">41 madison ave, floor 24
-                                    new work, NY 10010</span> </h4>
-                        </div>
-
-                        <div class="pt-0 pb-3 overflow-hidden card-body d-flex ps-4 pe-4">
-                            <div class="p-3 bg-primary me-2 rounded-xxl">
-                                <h4 class="mb-0 text-white fw-700 font-lg ls-3 lh-1"><span
-                                        class="text-white ls-1 d-block font-xsss fw-600">APR</span>23</h4>
-                            </div>
-                            <h4 class="mt-2 fw-700 text-grey-900 font-xssss">Aniversary Event <span
-                                    class="mt-1 d-block font-xsssss fw-500 lh-4 text-grey-500">41 madison ave, floor 24
-                                    new work, NY 10010</span> </h4>
-                        </div>
-
-                    </div>
                 </div>
             </div>
         </div>
 
     </div>
 </div>
+<!-- main content -->

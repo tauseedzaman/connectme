@@ -12,14 +12,14 @@ $(document).ready(function() {
     }
 
     function PageLoad() {
-        //   $( window ).on( "load", function() {
-        //         setInterval(function(){
-        //             $('.preloader-wrap').fadeOut(300);
-        //         }, 400);
-        //         setInterval(function(){
-        //             $('body').addClass('loaded');
-        //         }, 600);
-        //   });
+        $(window).on("load", function() {
+            setInterval(function() {
+                $('.preloader-wrap').fadeOut(300);
+            }, 400);
+            setInterval(function() {
+                $('body').addClass('loaded');
+            }, 600);
+        });
     }
 
 

@@ -45,7 +45,12 @@
                                 <figure class="avatar me-3"><img
                                         src="{{ asset('storage') . '/' . $post->user->profile ?? 'images/user-7.png' }}"
                                         alt="image" class="shadow-sm rounded-circle w45"></figure>
-                                <h4 class="mt-1 fw-700 text-grey-900 font-xssss">{{ $post->user->username }} <span
+                                <h4 class="mt-1 fw-700 text-grey-900 font-xssss"> <a href="{{ route("user",$post->user->uuid) }}">{{ $post->user->username }}</a> @if ($post->is_group_post)
+                                    posted on <a href="{{ route("group",$post->group->uuid) }}">{{$post->group->name}}</a>
+                                @endif
+                                @if ($post->is_page_post)
+                                    posted on <a href="{{ route("group",$post->page->uuid) }}">{{$post->page->name}}</a>
+                                @endif  <span
                                         class="mt-1 d-block font-xssss fw-500 lh-3 text-grey-500">{{ $post->created_at->diffForHumans() }}</span>
                                 </h4>
                                 <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown"

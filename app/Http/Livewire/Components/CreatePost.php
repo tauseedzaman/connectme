@@ -16,7 +16,14 @@ class CreatePost extends Component
     public $images;
     public $video;
 
+    public $type;
+    public $iid;
 
+    public function mount($type = "Normal", $id = Null)
+    {
+        $this->type = $type;
+        $this->iid = $id;
+    }
     public function render()
     {
         return view('livewire.components.create-post');
@@ -34,6 +41,10 @@ class CreatePost extends Component
             $post = Post::create([
                 "uuid" => Str::uuid(),
                 "user_id" => auth()->id(),
+                "is_group_post" => $this->type == "group" ? 1 : 0,
+                "is_page_post" => $this->type == "page" ? 1 : 0,
+                "group_id" => $this->type == "group" ? $this->iid : Null,
+                "page_id" => $this->type == "page" ? $this->iid : Null,
                 "content" => $this->content,
             ]);
 

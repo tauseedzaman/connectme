@@ -80,9 +80,9 @@ class RegisteredUserController extends Controller
             // Use the client to do fun stuff like send text messages!
             $client->messages->create(
                 // the number you'd like to send the message to
-                "+923429382554",
+                $user->mobile,
                 [
-                    "from" => "+12706719726",
+                    "from" => env("TWILIO_Number"),
                     // the body of the text message you'd like to send
                     'body' => 'Thanks for registering on '. config("app.name"). "\n your OTP is: ".$otp
                 ]

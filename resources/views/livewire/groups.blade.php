@@ -38,7 +38,7 @@
                                                 src="{{ asset('storage') . '/' . $group->icon }}" alt="image"
                                                 class="float-right p-1 bg-white rounded-circle w-100"></figure>
                                         <div class="clearfix"></div>
-                                        <h4 class="fw-700 font-xsss mt-3 mb-1">{{ $group->name }}</h4>
+                                        <h4 class="fw-700 font-xsss mt-3 mb-1"> <a href="{{ route("group",$group->uuid) }}"> {{ $group->name }}</a></h4>
                                         <p class="fw-500 font-xsssss text-grey-500 mt-0 mb-3">
                                             {{ $group->members . ' Members - ' . App\Models\Post::where('group_id', $group->id)->count() }}
                                             Posts</p>

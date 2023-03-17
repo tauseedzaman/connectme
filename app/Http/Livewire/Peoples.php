@@ -15,6 +15,15 @@ class Peoples extends Component
     public $paginator = 10;
     public $search;
 
+    public $listeners = [
+        "load-more" => 'LoadMore'
+    ];
+
+    public function LoadMore()
+    {
+        $this->paginator = $this->paginator +8;
+    }
+
     public function acceptfriend($id)
     {
         $user = User::where("id", $id)->first();

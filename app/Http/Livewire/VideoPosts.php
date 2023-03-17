@@ -11,8 +11,17 @@ use Livewire\Component;
 
 class VideoPosts extends Component
 {
-    public $paginate_no = 20;
+    public $paginate_no = 10;
     public $comment;
+
+    public $listeners = [
+        "load-more" => 'LoadMore'
+    ];
+
+    public function LoadMore()
+    {
+        $this->paginate_no = $this->paginate_no + 3;
+    }
 
     public function saveComment($post_id)
     {
@@ -24,7 +33,8 @@ class VideoPosts extends Component
             Comment::firstOrCreate([
                 "post_id" => $post_id,
                 "comment" => $this->comment,
-                 "user_id" => auth()->id()]);
+                "user_id" => auth()->id()
+            ]);
             $post = Post::findOrFail($post_id);
             $post->comments += 1;
             $post->save();
@@ -69,9 +79,9 @@ class VideoPosts extends Component
 
     public function render()
     {
-        $posts = PostMedia::where("file_type","video")->latest()->pluck("post_id");
+        $posts = PostMedia::where("file_type", "video")->latest()->pluck("post_id");
         return view('livewire.video-posts', [
-            'posts' => Post::whereIn("id",$posts)->with("user")->latest()->paginate($this->paginate_no)
+            'posts' => Post::whereIn("id", $posts)->with("user")->latest()->paginate($this->paginate_no)
         ])->extends("layouts.app");
     }
 }

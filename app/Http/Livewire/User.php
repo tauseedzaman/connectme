@@ -17,6 +17,14 @@ class User extends Component
 
     public $paginate_no = 20;
     public $comment;
+    public $listeners = [
+        "load-more" => 'LoadMore'
+    ];
+
+    public function LoadMore()
+    {
+        $this->paginate_no = $this->paginate_no + 3;
+    }
 
     public function toggle()
     {

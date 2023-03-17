@@ -74,11 +74,11 @@
         <div class="modal bottom side fade" id="{{ $story->user->uuid }}" tabindex="-1" role="dialog"
             style=" overflow-y: auto;">
             <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content border-0 bg-transparent">
-                    <button type="button" class="close mt-0 position-absolute top--30 right--10" data-dismiss="modal"
+                <div class="bg-transparent border-0 modal-content">
+                    <button type="button" class="mt-0 close position-absolute top--30 right--10" data-dismiss="modal"
                         aria-label="Close"><i class=" text-grey-900 font-xssss">X</i></button>
-                    <div class="modal-body p-0">
-                        <div class="card w-100 border-0 rounded-3 overflow-hidden bg-gradiant-bottom bg-gradiant-top">
+                    <div class="p-0 modal-body">
+                        <div class="overflow-hidden border-0 card w-100 rounded-3 bg-gradiant-bottom bg-gradiant-top">
                             <div class="owl-carousel owl-theme dot-style3 story-slider owl-dot-nav nav-none">
                                 @foreach (json_decode($story->story) as $story)
                                     <div class="item"><img src="{{ asset('storage') . '/' . $story }}"
@@ -87,11 +87,11 @@
                                 @endforeach
                             </div>
                         </div>
-                        <div class="form-group mt-3 mb-0 p-3 position-absolute bottom-0 z-index-1 w-100">
+                        <div class="bottom-0 p-3 mt-3 mb-0 form-group position-absolute z-index-1 w-100">
                             <input type="text"
-                                class="style2-input w-100 bg-transparent border-light-md p-3 pe-5 font-xssss fw-500 text-white"
+                                class="p-3 text-white bg-transparent style2-input w-100 border-light-md pe-5 font-xssss fw-500"
                                 value="Write Comments">
-                            <span class=" text-white font-md text-white position-absolute"
+                            <span class="text-white font-md position-absolute"
                                 style="bottom: 35px;right:30px;"><i>{!! $icons->getIcon('send') !!}</i></span>
                         </div>
                     </div>
@@ -110,6 +110,15 @@
     @livewireScripts
 
     <script>
+
+        window.onscroll = function(x){
+            if((window.innerHeight + window.scrollY) >= document.body.offsetHeight ){
+                window.livewire.emit("load-more")
+            }
+        }
+
+
+
         window.addEventListener('alert', event => {
             toastr[event.detail.type](event.detail.message,
                 event.detail.title ?? ''), toastr.options = {

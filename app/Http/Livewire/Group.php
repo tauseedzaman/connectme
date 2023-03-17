@@ -16,7 +16,17 @@ class Group extends Component
     public $uuid;
     public $paginator = 10;
 
+
     public $comment;
+
+    public $listeners = [
+        "load-more" => 'LoadMore'
+    ];
+
+    public function LoadMore()
+    {
+        $this->paginator = $this->paginator + 3;
+    }
 
     public function saveComment($post_id)
     {

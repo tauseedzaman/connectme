@@ -12,8 +12,17 @@ use Livewire\WithPagination;
 class Pages extends Component
 {
     use WithPagination;
-    public $paginator = 13;
+    public $paginator = 12;
     public $search = '';
+
+    public $listeners = [
+        "load-more" => 'LoadMore'
+    ];
+
+    public function LoadMore()
+    {
+        $this->paginator = $this->paginator + 6;
+    }
 
     public function follow($id)
     {

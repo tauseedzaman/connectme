@@ -13,8 +13,17 @@ use Livewire\Component;
 
 class Home extends Component
 {
-    public $paginate_no = 20;
+    public $paginate_no = 9;
     public $comment;
+
+    public $listeners = [
+        "load-more" => 'LoadMore'
+    ];
+
+    public function LoadMore()
+    {
+        $this->paginate_no = $this->paginate_no + 3;
+    }
 
     public function saveComment($post_id)
     {
@@ -147,5 +156,3 @@ class Home extends Component
         ])->extends("layouts.app");
     }
 }
-
-

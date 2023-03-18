@@ -45,12 +45,16 @@
                                 <figure class="avatar me-3"><img
                                         src="{{ asset('storage') . '/' . $post->user->profile ?? 'images/user-7.png' }}"
                                         alt="image" class="shadow-sm rounded-circle w45"></figure>
-                                <h4 class="mt-1 fw-700 text-grey-900 font-xssss"> <a href="{{ route("user",$post->user->uuid) }}">{{ $post->user->username }}</a> @if ($post->is_group_post)
-                                    posted on <a href="{{ route("group",$post->group->uuid) }}">{{$post->group->name}}</a>
-                                @endif
-                                @if ($post->is_page_post)
-                                    posted on <a href="{{ route("group",$post->page->uuid) }}">{{$post->page->name}}</a>
-                                @endif  <span
+                                <h4 class="mt-1 fw-700 text-grey-900 font-xssss"> <a
+                                        href="{{ route('user', $post->user->uuid) }}">{{ $post->user->username }}</a>
+                                    @if ($post->is_group_post)
+                                        posted on <a
+                                            href="{{ route('group', $post->group->uuid) }}">{{ $post->group->name }}</a>
+                                    @endif
+                                    @if ($post->is_page_post)
+                                        posted on <a
+                                            href="{{ route('group', $post->page->uuid) }}">{{ $post->page->name }}</a>
+                                    @endif <span
                                         class="mt-1 d-block font-xssss fw-500 lh-3 text-grey-500">{{ $post->created_at->diffForHumans() }}</span>
                                 </h4>
                                 <a href="#" class="ms-auto" id="dropdownMenu2" data-bs-toggle="dropdown"
@@ -107,7 +111,8 @@
                                             @endif
                                             <div
                                                 class=" p-1 {{ count($medias) == 1 ? 'col-12' : 'col-xs-4 col-sm-4' }} ">
-                                                <a href="{{ asset('storage') . '/' . $media }}" data-lightbox="roadtrip"
+                                                <a href="{{ asset('storage') . '/' . $media }}"
+                                                    data-lightbox="roadtrip"
                                                     class="{{ $loop->index == 2 ? 'position-relative d-block' : '' }}"><img
                                                         src="{{ asset('storage') . '/' . $media }}"
                                                         class="rounded-3 w-100" alt="image">
@@ -158,7 +163,8 @@
                                         class=" text-dark text-grey-900 btn-round-sm font-lg"
                                         style="margin-top: -10px">{!! $icons->getIcon('message-circle') !!}</i><span
                                         class="d-none-xss">{{ $post->comments }} Comment</span></a>
-                                <a href="#" id="dropdownMenu21" data-bs-toggle="dropdown" aria-expanded="false"
+                                <a href="#" id="dropdownMenu21" data-bs-toggle="dropdown"
+                                    aria-expanded="false"
                                     class="ms-auto d-flex align-items-center fw-600 text-grey-900 text-dark lh-26 font-xssss"><i
                                         class=" text-grey-900 text-dark btn-round-sm font-lg"
                                         style="margin-top: -10px">{!! $icons->getIcon('share-2') !!} </i><span
@@ -329,66 +335,29 @@
                     <div class="mb-3 border-0 card w-100 shadow-xss rounded-xxl">
                         <div class="p-4 card-body d-flex align-items-center">
                             <h4 class="mb-0 fw-700 font-xssss text-grey-900">Suggest Pages</h4>
-                            <a href="default-group.html" class="fw-600 ms-auto font-xssss text-primary">See all</a>
+                            <a href="{{ route('pages') }}" class="fw-600 ms-auto font-xssss text-primary">See all</a>
                         </div>
-                        <div class="pt-4 pb-0 overflow-hidden card-body d-flex ps-4 pe-4 border-top-xs bor-0">
-                            <img src="images/g-2.jpg" alt="img" class="mb-2 img-fluid rounded-xxl">
-                        </div>
-                        <div class="pt-0 pb-4 card-body d-flex align-items-center ps-4 pe-4">
-                            <a href="#"
-                                class="p-2 text-center lh-28 w-100 bg-grey text-grey-800 font-xssss fw-700 rounded-xl"><i
-                                    class="feather-external-link font-xss me-2"></i> Like Page</a>
-                        </div>
+                        @forelse ($suggested_pages as $page)
+                            <div title="{{ $page->name }}"
+                                class="pt-4 pb-0 overflow-hidden card-body d-flex ps-4 pe-4 border-top-xs bor-0">
+                                <img src="{{ asset('storage') . '/' . $page->thumbnail }}" alt="img"
+                                    class="mb-2 img-fluid rounded-xxl">
+                            </div>
+                            <div class="pt-0 pb-4 card-body d-flex align-items-center ps-4 pe-4">
+                                <a style="cursor: pointer" wire:click="follow({{ $page->id }})" title="like {{ $page->name }}"
+                                    class="p-2 text-center lh-28 w-100 bg-grey text-grey-800 font-xssss fw-700 rounded-xl"><i
+                                        class=" font-xss me-2" style="margin-top: -10px">{!! $icons->getIcon('external-link') !!}</i>
+                                    Like Page</a>
+                            </div>
+                        @empty
+                            <p class="text-center text-danger">No Page Found..</p>
+                        @endforelse
 
-                        <div class="pt-0 pb-0 overflow-hidden card-body d-flex ps-4 pe-4">
-                            <img src="images/g-3.jpg" alt="img" class="mb-2 img-fluid rounded-xxl bg-lightblue">
-                        </div>
-                        <div class="pt-0 pb-4 card-body d-flex align-items-center ps-4 pe-4">
-                            <a href="#"
-                                class="p-2 text-center lh-28 w-100 bg-grey text-grey-800 font-xssss fw-700 rounded-xl"><i
-                                    class="feather-external-link font-xss me-2"></i> Like Page</a>
-                        </div>
+
 
 
                     </div>
 
-
-                    <div class="mb-3 border-0 card w-100 shadow-xss rounded-xxl">
-                        <div class="p-4 card-body d-flex align-items-center">
-                            <h4 class="mb-0 fw-700 font-xssss text-grey-900">Event</h4>
-                            <a href="default-event.html" class="fw-600 ms-auto font-xssss text-primary">See all</a>
-                        </div>
-                        <div class="pt-0 pb-3 overflow-hidden card-body d-flex ps-4 pe-4">
-                            <div class="p-3 bg-success me-2 rounded-xxl">
-                                <h4 class="mb-0 text-white fw-700 font-lg ls-3 lh-1"><span
-                                        class="text-white ls-1 d-block font-xsss fw-600">FEB</span>22</h4>
-                            </div>
-                            <h4 class="mt-2 fw-700 text-grey-900 font-xssss">Meeting with clients <span
-                                    class="mt-1 d-block font-xsssss fw-500 lh-4 text-grey-500">41 madison ave, floor 24
-                                    new work, NY 10010</span> </h4>
-                        </div>
-
-                        <div class="pt-0 pb-3 overflow-hidden card-body d-flex ps-4 pe-4">
-                            <div class="p-3 bg-warning me-2 rounded-xxl">
-                                <h4 class="mb-0 text-white fw-700 font-lg ls-3 lh-1"><span
-                                        class="text-white ls-1 d-block font-xsss fw-600">APR</span>30</h4>
-                            </div>
-                            <h4 class="mt-2 fw-700 text-grey-900 font-xssss">Developer Programe <span
-                                    class="mt-1 d-block font-xsssss fw-500 lh-4 text-grey-500">41 madison ave, floor 24
-                                    new work, NY 10010</span> </h4>
-                        </div>
-
-                        <div class="pt-0 pb-3 overflow-hidden card-body d-flex ps-4 pe-4">
-                            <div class="p-3 bg-primary me-2 rounded-xxl">
-                                <h4 class="mb-0 text-white fw-700 font-lg ls-3 lh-1"><span
-                                        class="text-white ls-1 d-block font-xsss fw-600">APR</span>23</h4>
-                            </div>
-                            <h4 class="mt-2 fw-700 text-grey-900 font-xssss">Aniversary Event <span
-                                    class="mt-1 d-block font-xsssss fw-500 lh-4 text-grey-500">41 madison ave, floor 24
-                                    new work, NY 10010</span> </h4>
-                        </div>
-
-                    </div>
                 </div>
             </div>
         </div>

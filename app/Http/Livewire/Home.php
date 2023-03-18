@@ -6,6 +6,8 @@ use App\Models\Comment;
 use App\Models\Friend;
 use App\Models\Like;
 use App\Models\Notification;
+use App\Models\Page;
+use App\Models\PageLike;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -148,11 +150,43 @@ class Home extends Component
         ]);
     }
 
+    public function follow($id)
+    {
+        $page = Page::findOrFail($id);
+        DB::beginTransaction();
+        try {
+            PageLike::create([
+                "user_id" => auth()->id(),
+                "page_id" => $page->id
+            ]);
+            $page->members += 1;
+            $page->save();
+            Notification::create([
+                "type" => "page_liked",
+                "user_id" => $page->user_id,
+                "message" => auth()->user()->username . " followed your page " . $page->name,
+                "url" => "#",
+            ]);
+
+            $this->dispatchBrowserEvent('alert', [
+                "type" => "success", "message" =>  " you followed " . $page->name
+            ]);
+            DB::commit();
+            return redirect()->route("page",$page->uuid);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+
+    }
+
     public function render()
     {
+        $my_pages=PageLike::where("user_id",auth()->id())->pluck("page_id");
         return view('livewire.home', [
             'posts' => Post::with("user")->latest()->paginate($this->paginate_no),
-            'friend_requests' => Friend::where(["friend_id" => auth()->id(), "status" => "pending"])->with("user")->latest()->take(5)->get()
+            'friend_requests' => Friend::where(["friend_id" => auth()->id(), "status" => "pending"])->with("user")->latest()->take(5)->get(),
+            "suggested_pages"=>Page::whereNotIn("id",$my_pages)->inRandomOrder()->take(3)->get()
         ])->extends("layouts.app");
     }
 }

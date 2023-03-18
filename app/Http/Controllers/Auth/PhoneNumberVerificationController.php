@@ -45,9 +45,9 @@ class PhoneNumberVerificationController extends Controller
         $client = new Client($sid, $token);
 
         $client->messages->create(
-            "reciver phone no",
+            $user->mobile,
             [
-                "from" => "from phone no",
+                "from" => env("TWILIO_Number"),
                 'body' => 'Thanks for registering on ' . config("app.url") . "\n your OTP is: " . $otp
             ]
         );

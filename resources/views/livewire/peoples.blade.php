@@ -32,7 +32,7 @@
                                         <h4 class="mt-3 mb-1 fw-700 font-xsss">
                                             {{ $user->first_name . ' ' . $user->last_name }}
                                         </h4>
-                                        <small class="mt-3 mb-1">{{ ' @' . $user->username }}</small><br>
+                                        <small class="mt-3 mb-1"><a href="{{ route("user",$user->uuid) }}">{{ ' @' . $user->username }}</a></small><br>
                                         @if (App\Models\Friend::Where(['friend_id' => auth()->id(), 'user_id' => $user->id, 'status' => 'pending'])->exists())
                                             <button wire:click="acceptfriend('{{ $user->id }}')"
                                                 class="pt-2 pb-2 mt-0 text-white btn ps-3 pe-3 lh-24 ms-1 ls-3 d-inline-block rounded-xl bg-primary font-xsssss fw-700 ls-lg">ACCEPT</button>

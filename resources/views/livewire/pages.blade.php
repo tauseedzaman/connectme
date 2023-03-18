@@ -32,7 +32,8 @@
                                                 src="{{ asset('storage') . '/' . $page->icon }}" alt="image"
                                                 class="float-right p-1 bg-white rounded-circle w-100"></figure>
                                         <div class="clearfix"></div>
-                                        <h4 class="fw-700 font-xss mt-3 mb-0">{{ $page->name }} </h4>
+                                        <h4 class="fw-700 font-xss mt-3 mb-0"> <a
+                                                href="{{ route('page', $page->uuid) }}"> {{ $page->name }}</a> </h4>
                                         <p class="fw-500 font-xssss text-grey-500 mt-0 mb-3">{{ $page->location }}</p>
                                         <ul class="d-flex align-items-center justify-content-center mt-1">
                                             <li class="m-2">
@@ -54,8 +55,8 @@
                                         <li class="m-1"><img src="images/fast-graduate.svg" alt="icon"></li>
                                     </ul> --}}
                                         @if (App\Models\PageLike::where(['user_id' => auth()->id(), 'page_id' => $page->id])->exists())
-                                        <a wire:click="ulfollow({{ $page->id }})"
-                                            class="mt-4 p-0 btn p-2 lh-24 w100 ms-1 ls-3 d-inline-block rounded-xl bg-warning font-xsssss fw-700 ls-lg text-white">UNFOLLOW</a>
+                                            <a wire:click="ulfollow({{ $page->id }})"
+                                                class="mt-4 p-0 btn p-2 lh-24 w100 ms-1 ls-3 d-inline-block rounded-xl bg-warning font-xsssss fw-700 ls-lg text-white">UNFOLLOW</a>
                                         @else
                                             <a wire:click="follow({{ $page->id }})"
                                                 class="mt-4 p-0 btn p-2 lh-24 w100 ms-1 ls-3 d-inline-block rounded-xl bg-current font-xsssss fw-700 ls-lg text-white">FOLLOW</a>

@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             User::create([
                 'uuid' => Str::uuid(),
                 'first_name' => fake()->firstname(),
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             Post::create([
                 "uuid" => Str::uuid(),
                 "user_id" => User::InRandomOrder()->first()->id,
@@ -47,11 +47,11 @@ class DatabaseSeeder extends Seeder
                 "comments" => rand(200, 10000),
             ]);
         }
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             Page::create([
                 "uuid" => Str::uuid(),
                 "user_id" => User::InRandomOrder()->first()->id,
-                "icon" => "pages/6Byv86zmAQ0p4rk8rZcImPD3GqPHDWtQldLwjUat.png",
+                "icon" => "pages/6Byv86zmAQ0p4rk8rZcImPD3GqPHDWtQldLwjUat.jpg",
                 "thumbnail" => "pages/EJx2R6bIGp2eRWzUoZafrTW3xAgdknF78rKB8pHt.png",
                 "description" => fake()->sentence(rand(10, 50)),
                 "name" => fake()->username(),
@@ -61,11 +61,11 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 100; $i++) {
             Group::create([
                 "uuid" => Str::uuid(),
                 "user_id" => User::InRandomOrder()->first()->id,
-                "icon" => "pages/6Byv86zmAQ0p4rk8rZcImPD3GqPHDWtQldLwjUat.png",
+                "icon" => "pages/6Byv86zmAQ0p4rk8rZcImPD3GqPHDWtQldLwjUat.jpg",
                 "thumbnail" => "pages/EJx2R6bIGp2eRWzUoZafrTW3xAgdknF78rKB8pHt.png",
                 "description" => fake()->sentence(rand(10, 50)),
                 "name" => fake()->username(),
@@ -74,7 +74,6 @@ class DatabaseSeeder extends Seeder
                 "members" => rand(200, 10000),
             ]);
         }
-
 
 
 
@@ -91,6 +90,53 @@ class DatabaseSeeder extends Seeder
             "mobile_verified_at" => now(),
             'password' => Hash::make("password"),
         ]);
+
+        $page = Page::create([
+            "uuid" => Str::uuid(),
+            "user_id" =>  $user->id,
+            "icon" => "pages/6Byv86zmAQ0p4rk8rZcImPD3GqPHDWtQldLwjUat.jpg",
+            "thumbnail" => "pages/EJx2R6bIGp2eRWzUoZafrTW3xAgdknF78rKB8pHt.png",
+            "description" => fake()->sentence(rand(10, 50)),
+            "name" => 'tauseed.zaman',
+            "location" => fake()->sentence(3),
+            "type" => fake()->sentence(3),
+            "members" => rand(200, 10000),
+        ]);
+
+        $group = Group::create([
+            "uuid" => Str::uuid(),
+            "user_id" => $user->id,
+            "icon" => "pages/6Byv86zmAQ0p4rk8rZcImPD3GqPHDWtQldLwjUat.jpg",
+            "thumbnail" => "pages/EJx2R6bIGp2eRWzUoZafrTW3xAgdknF78rKB8pHt.png",
+            "description" => fake()->sentence(rand(10, 50)),
+            "name" => fake()->username(),
+            "location" => fake()->sentence(3),
+            "type" => fake()->sentence(3),
+            "members" => rand(200, 10000),
+        ]);
+
+        for ($i = 0; $i < 100; $i++) {
+            Post::create([
+                "uuid" => Str::uuid(),
+                "user_id" => $user->id,
+                "content" => fake()->sentence(rand(10, 50)),
+                "page_id" => $page->id,
+                'is_page_post' => 1,
+                "likes" => rand(200, 10000),
+                "comments" => rand(200, 10000),
+            ]);
+        }
+
+        for ($i = 0; $i < 100; $i++) {
+            Post::create([
+                "uuid" => Str::uuid(),
+                "user_id" => $user->id,
+                "content" => fake()->sentence(rand(10, 50)),
+                "group_id" => $group->id,
+                'is_group_post' => 1,
+                "likes" => rand(200, 10000),
+                "comments" => rand(200, 10000),
+            ]);
+        }
     }
 }
-

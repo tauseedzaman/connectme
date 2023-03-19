@@ -4,6 +4,8 @@ namespace App\Http\Livewire;
 
 use App\Models\Comment;
 use App\Models\Friend;
+use App\Models\Group;
+use App\Models\GroupMember;
 use App\Models\Like;
 use App\Models\Notification;
 use App\Models\Page;
@@ -180,13 +182,46 @@ class Home extends Component
 
     }
 
+    public function join($id)
+    {
+        $group = Group::findOrFail($id);
+        DB::beginTransaction();
+        try {
+
+
+            GroupMember::create([
+                "user_id" => auth()->id(),
+                "group_id" => $group->id
+            ]);
+            $group->members += 1;
+            $group->save();
+            Notification::create([
+                "type" => "page_liked",
+                "user_id" => $group->user_id,
+                "message" => auth()->user()->username . " joined your group " . $group->name,
+                "url" => "#",
+            ]);
+
+            $this->dispatchBrowserEvent('alert', [
+                "type" => "success", "message" =>  " you joined " . $group->name
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+
+    }
+
     public function render()
     {
         $my_pages=PageLike::where("user_id",auth()->id())->pluck("page_id");
+        $my_groups=GroupMember::where("user_id",auth()->id())->pluck("group_id");
         return view('livewire.home', [
             'posts' => Post::with("user")->latest()->paginate($this->paginate_no),
             'friend_requests' => Friend::where(["friend_id" => auth()->id(), "status" => "pending"])->with("user")->latest()->take(5)->get(),
-            "suggested_pages"=>Page::whereNotIn("id",$my_pages)->inRandomOrder()->take(3)->get()
+            "suggested_pages"=>Page::whereNotIn("id",$my_pages)->inRandomOrder()->take(3)->get(),
+            "suggested_groups"=>Group::whereNotIn("id",$my_groups)->inRandomOrder()->take(2)->get()
         ])->extends("layouts.app");
     }
 }

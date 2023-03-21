@@ -26,14 +26,14 @@
                 class="pt-2 pb-2 border-0 bg-grey lh-32 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg">
         </div>
     </form>
-    <a href="{{ url("/") }}" class="  p-2 text-center ms-0 menu-icon center-menu-icon"><i
-            class=" {{ request()->route()->getName()=="home" ? "bg-primary":"" }} font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"
+    <a href="{{ url('/') }}" class="  p-2 text-center ms-0 menu-icon center-menu-icon"><i
+            class=" {{ request()->route()->getName() == 'home'? 'bg-primary': '' }} font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"
             style="margin-top: -10px">{!! $icons->getIcon('home') !!}</i></a>
-    <a href="{{route("explore")}}" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i
-            class=" {{ request()->route()->getName()=="explore" ? "bg-primary":"" }} font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"
+    <a href="{{ route('explore') }}" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i
+            class=" {{ request()->route()->getName() == 'explore'? 'bg-primary': '' }} font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"
             style="margin-top: -10px">{!! $icons->getIcon('zap') !!}</i></a>
     <a href="{{ route('videos') }}" class="   p-2 text-center ms-0 menu-icon center-menu-icon"><i
-            class="{{ request()->route()->getName()=="videos" ? "bg-primary":"" }} font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"
+            class="{{ request()->route()->getName() == 'videos'? 'bg-primary': '' }} font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"
             style="margin-top: -10px">{!! $icons->getIcon('video') !!}</i></a>
     <a href="#" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i
             class=" font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"
@@ -41,36 +41,29 @@
 
 
     <a href="#" class="p-2 text-center ms-auto menu-icon" id="dropdownMenu3" data-bs-toggle="dropdown"
-        aria-expanded="false"><span class="dot-count bg-warning"></span><i class="text-current font-xl"
-            style="margin-top: -10px">{!! $icons->getIcon('bell') !!}</i></a>
+        aria-expanded="false">
+        @if (App\Models\Notification::where(['user_id' => auth()->id(), 'read_at' => null])->latest()->exists())
+            <span class="dot-count bg-warning"></span>
+        @endif
+        <i class="text-current font-xl" style="margin-top: -10px">{!! $icons->getIcon('bell') !!}</i>
+    </a>
     <div class="p-4 border-0 shadow-lg dropdown-menu dropdown-menu-end rounded-3" aria-labelledby="dropdownMenu3">
 
         <h4 class="mb-4 fw-700 font-xss">Notification</h4>
-        <div class="mb-3 border-0 card bg-transparent-card w-100 ps-5">
-            <img src="images/user-8.png" alt="user" class="left-0 w40 position-absolute">
-            <h5 class="mt-0 mb-1 font-xsss text-grey-900 fw-700 d-block">Hendrix Stamp <span
-                    class="float-right mt-1 text-grey-400 font-xsssss fw-600"> 3 min</span></h5>
-            <h6 class="text-grey-500 fw-500 font-xssss lh-4">There are many variations of pass..</h6>
-        </div>
-        <div class="mb-3 border-0 card bg-transparent-card w-100 ps-5">
-            <img src="images/user-4.png" alt="user" class="left-0 w40 position-absolute">
-            <h5 class="mt-0 mb-1 font-xsss text-grey-900 fw-700 d-block">Goria Coast <span
-                    class="float-right mt-1 text-grey-400 font-xsssss fw-600"> 2 min</span></h5>
-            <h6 class="text-grey-500 fw-500 font-xssss lh-4">Mobile Apps UI Designer is require..</h6>
-        </div>
 
-        <div class="mb-3 border-0 card bg-transparent-card w-100 ps-5">
-            <img src="images/user-7.png" alt="user" class="left-0 w40 position-absolute">
-            <h5 class="mt-0 mb-1 font-xsss text-grey-900 fw-700 d-block">Surfiya Zakir <span
-                    class="float-right mt-1 text-grey-400 font-xsssss fw-600"> 1 min</span></h5>
-            <h6 class="text-grey-500 fw-500 font-xssss lh-4">Mobile Apps UI Designer is require..</h6>
-        </div>
-        <div class="border-0 card bg-transparent-card w-100 ps-5">
-            <img src="images/user-6.png" alt="user" class="left-0 w40 position-absolute">
-            <h5 class="mt-0 mb-1 font-xsss text-grey-900 fw-700 d-block">Victor Exrixon <span
-                    class="float-right mt-1 text-grey-400 font-xsssss fw-600"> 30 sec</span></h5>
-            <h6 class="text-grey-500 fw-500 font-xssss lh-4">Mobile Apps UI Designer is require..</h6>
-        </div>
+        @forelse ((App\Models\Notification::where("user_id",auth()->id())->latest()->take(5)->get()) as $item)
+            <a href="{{ $item->url ?? '#' }}">
+                <div class="mb-3 border-0 card bg-transparent-card w-100 border-bottom shadow">
+                    <p class="mt-0 mb-1 font-xsss text-grey-900 fw-700 d-block">
+                        {{ $item->created_at->diffForHumans() }}</p>
+                    <h6 class="text-grey-500 fw-500 font-xssss lh-4">{{ $item->message }}</h6>
+                </div>
+            </a>
+        @empty
+            <h1 class="text-center text-danger">No Notifications Found!</h1>
+        @endforelse
+
+
     </div>
     <a href="#" class="p-2 text-center ms-3 menu-icon chat-active-btn"><i class="text-current font-xl"
             style="margin-top: -10px">{!! $icons->getIcon('message-circle') !!}</i></a>
@@ -95,8 +88,7 @@
                 </li>
                 <li>
                     <label class="item-radio item-content">
-                        <input type="radio" name="color-radio" value="blue" checked=""><i
-                            class="ti-check"></i>
+                        <input type="radio" name="color-radio" value="blue" checked=""><i class="ti-check"></i>
                         <span class="circle-color bg-blue" style="background-color: #132977;"></span>
                     </label>
                 </li>

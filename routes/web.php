@@ -10,6 +10,8 @@ use App\Http\Livewire\Page;
 use App\Http\Livewire\Pages;
 use App\Http\Livewire\Peoples;
 use App\Http\Livewire\Profile;
+use App\Http\Livewire\Settings\AccountInformaiton;
+use App\Http\Livewire\Settings\Setting;
 use App\Http\Livewire\SinglePost;
 use App\Http\Livewire\User;
 use App\Http\Livewire\VideoPosts;
@@ -36,21 +38,6 @@ use Illuminate\Support\Facades\Route;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Route::middleware(["auth", "verified", 'VerifiedUser'])->group(function () {
     Route::get('/', Home::class)->name("home");
     Route::get('/videos', VideoPosts::class)->name("videos");
@@ -64,6 +51,13 @@ Route::middleware(["auth", "verified", 'VerifiedUser'])->group(function () {
 
     // Route::get('/profile/', Profile::class)->name("profile");
     Route::get('/user/{uuid}', User::class)->name("user");
+
+    // users settings
+    Route::prefix('user-profille')->group(function () {
+        Route::get('/', Setting::class)->name("settings");
+        Route::get('/settings', AccountInformaiton::class)->name("settings.account_information");
+    });
+
     Route::get('/explore', Peoples::class)->name("explore");
     Route::get('/post/{useruuid}/{postuuid}', SinglePost::class)->name("single-post");
 });

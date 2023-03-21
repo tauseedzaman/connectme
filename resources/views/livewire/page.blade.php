@@ -47,8 +47,7 @@
                                     <a
                                         class="mt-4 p-0 btn p-2 lh-24 w100 ms-1 ls-3 d-inline-block rounded-xl bg-current font-xsssss fw-700 ls-lg text-white">Setting</a>
                                 @endif
-                                <a href="#"
-                                style="margin-top: 15px"
+                                <a href="#" style="margin-top: 15px"
                                     class="d-none d-lg-block bg-greylight btn-round-lg ms-2 rounded-3 text-grey-700"><i
                                         class=" font-md" style="">{!! $icons->getIcon('mail') !!}</i></a>
                                 {{-- <a href="#" id="dropdownMenu8"
@@ -147,6 +146,9 @@
 
                 </div>
                 <div class="col-xl-8 col-xxl-9 col-lg-8">
+                    @if (App\Models\Page::where(['user_id' => auth()->id(), 'id' => $pagee->id]))
+                        @livewire('components.create-post', ['type' => 'page', 'id' => $pagee->id])
+                    @endif
 
                     @forelse ($posts as $post)
                         <div class="p-4 mb-3 border-0 card w-100 shadow-xss rounded-xxl">

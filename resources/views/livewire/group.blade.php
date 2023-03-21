@@ -32,6 +32,9 @@
                             @if (App\Models\GroupMember::where(['user_id' => auth()->id(), 'group_id' => $group->id])->exists())
                                 <a wire:click="leave({{ $group->id }})"
                                     class="bg-warning p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3">Leave</a>
+                            @elseif (App\Models\Group::where(['user_id' => auth()->id(), 'id' => $group->id])->exists())
+                                <a
+                                    class="bg-primary p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3">Settings</a>
                             @else
                                 <a wire:click="join({{ $group->id }})"
                                     class="bg-success p-3 z-index-1 rounded-3 text-white font-xsssss text-uppercase fw-700 ls-3">Join</a>
@@ -102,8 +105,9 @@
                 </div>
                 <div class="col-xl-8 col-xxl-9 col-lg-8">
 
-                    @if (App\Models\GroupMember::where(['user_id' => auth()->id(), 'group_id' => $group->id])->exists())
-                        @livewire('components.create-post',["type"=>"group","id"=>$group->id])
+                    @if (App\Models\GroupMember::where(['user_id' => auth()->id(), 'group_id' => $group->id])->exists() ||
+                        App\Models\Group::where(['user_id' => auth()->id(), 'id' => $group->id]))
+                        @livewire('components.create-post', ['type' => 'group', 'id' => $group->id])
                     @endif
 
                     @forelse ($posts as $post)

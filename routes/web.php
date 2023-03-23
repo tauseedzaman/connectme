@@ -11,8 +11,14 @@ use App\Http\Livewire\Pages;
 use App\Http\Livewire\Peoples;
 use App\Http\Livewire\Profile;
 use App\Http\Livewire\Settings\AccountInformaiton;
+use App\Http\Livewire\Settings\Help;
+use App\Http\Livewire\Settings\Notifications;
+use App\Http\Livewire\Settings\PasswordUpdate;
+use App\Http\Livewire\Settings\SavedPosts;
 use App\Http\Livewire\Settings\Setting;
+use App\Http\Livewire\Settings\Socials;
 use App\Http\Livewire\SinglePost;
+// use App\Http\Livewire\Socials;
 use App\Http\Livewire\User;
 use App\Http\Livewire\VideoPosts;
 use App\Models\Post;
@@ -29,12 +35,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-
-
-
-
-
 
 
 
@@ -56,6 +56,12 @@ Route::middleware(["auth", "verified", 'VerifiedUser'])->group(function () {
     Route::prefix('user-profille')->group(function () {
         Route::get('/', Setting::class)->name("settings");
         Route::get('/settings', AccountInformaiton::class)->name("settings.account_information");
+        Route::get('/saved-items', SavedPosts::class)->name("settings.saved_posts");
+        Route::get('/socials', Socials::class)->name("settings.socials");
+        Route::get('/reset-password', PasswordUpdate::class)->name("settings.password_update");
+        Route::get('/notifcation', Notifications::class)->name("settings.notifications");
+        Route::get('/help', Help::class)->name("settings.help");
+
     });
 
     Route::get('/explore', Peoples::class)->name("explore");

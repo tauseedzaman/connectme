@@ -11,6 +11,7 @@ use App\Models\Notification;
 use App\Models\Page;
 use App\Models\PageLike;
 use App\Models\Post;
+use App\Models\SavedPost;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -174,12 +175,11 @@ class Home extends Component
                 "type" => "success", "message" =>  " you followed " . $page->name
             ]);
             DB::commit();
-            return redirect()->route("page",$page->uuid);
+            return redirect()->route("page", $page->uuid);
         } catch (\Throwable $th) {
             DB::rollBack();
             throw $th;
         }
-
     }
 
     public function join($id)
@@ -210,18 +210,29 @@ class Home extends Component
             DB::rollBack();
             throw $th;
         }
+    }
 
+    public function save($post_id)
+    {
+        SavedPost::firstOrCreate([
+            "user_id" => auth()->id(),
+            "post_id" => $post_id
+        ]);
+
+        $this->dispatchBrowserEvent('alert', [
+            "type" => "success", "message" =>  "Item Saved"
+        ]);
     }
 
     public function render()
     {
-        $my_pages=PageLike::where("user_id",auth()->id())->pluck("page_id");
-        $my_groups=GroupMember::where("user_id",auth()->id())->pluck("group_id");
+        $my_pages = PageLike::where("user_id", auth()->id())->pluck("page_id");
+        $my_groups = GroupMember::where("user_id", auth()->id())->pluck("group_id");
         return view('livewire.home', [
             'posts' => Post::with("user")->latest()->paginate($this->paginate_no),
             'friend_requests' => Friend::where(["friend_id" => auth()->id(), "status" => "pending"])->with("user")->latest()->take(5)->get(),
-            "suggested_pages"=>Page::whereNotIn("id",$my_pages)->inRandomOrder()->take(3)->get(),
-            "suggested_groups"=>Group::whereNotIn("id",$my_groups)->inRandomOrder()->take(2)->get()
+            "suggested_pages" => Page::whereNotIn("id", $my_pages)->inRandomOrder()->take(3)->get(),
+            "suggested_groups" => Group::whereNotIn("id", $my_groups)->inRandomOrder()->take(2)->get()
         ])->extends("layouts.app");
     }
 }

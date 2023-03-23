@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Faq;
 use App\Models\Group;
 use App\Models\Page;
 use App\Models\Post;
@@ -136,6 +137,16 @@ class DatabaseSeeder extends Seeder
                 'is_group_post' => 1,
                 "likes" => rand(200, 10000),
                 "comments" => rand(200, 10000),
+            ]);
+        }
+
+
+
+        // sed faq or help disk
+        for ($i = 0; $i < 100; $i++) {
+            App\Models\Faq::create([
+                "question" => fake()->sentence(),
+                "answer" => fake()->paragraph(),
             ]);
         }
     }

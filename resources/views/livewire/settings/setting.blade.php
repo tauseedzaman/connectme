@@ -15,7 +15,7 @@
                                 <div class="nav-caption fw-600 font-xssss text-grey-500 mb-2">Genaral</div>
                                 <ul class="list-inline mb-4">
                                     <li class="list-inline-item d-block border-bottom me-0"><a
-                                            href="{{ route("settings.account_information") }}"
+                                            href="{{ route('settings.account_information') }}"
                                             class="pt-2 pb-2 d-flex align-items-center"><i
                                                 class="btn-round-md bg-primary-gradiant text-white  font-md me-3"
                                                 style="margin-top: -10px">{!! $icons->getIcon('home') !!}</i>
@@ -24,19 +24,19 @@
                                                 style="margin-top: -10px">{!! $icons->getIcon('arrow-right') !!}</i>
                                         </a></li>
                                     <li class="list-inline-item d-block border-bottom me-0"><a
-                                            href="contact-information.html"
+                                            href="{{ route('settings.saved_posts') }}"
                                             class="pt-2 pb-2 d-flex align-items-center"><i
                                                 class="btn-round-md bg-gold-gradiant text-white  font-md me-3"
                                                 style="margin-top: -10px">{!! $icons->getIcon('map-pin') !!}</i>
-                                            <h4 class="fw-600 font-xsss mb-0 mt-0">Saved Address</h4><i
+                                            <h4 class="fw-600 font-xsss mb-0 mt-0">Saved Posts</h4><i
                                                 class=" font-xsss text-grey-500 ms-auto mt-3"
                                                 style="margin-top: -10px">{!! $icons->getIcon('arrow-right') !!}</i>
                                         </a></li>
-                                    <li class="list-inline-item d-block me-0"><a href="social.html"
+                                    <li class="list-inline-item d-block me-0"><a href="{{ route('settings.socials') }}"
                                             class="pt-2 pb-2 d-flex align-items-center"><i
                                                 class="btn-round-md bg-red-gradiant text-white  font-md me-3"
                                                 style="margin-top: -10px">{!! $icons->getIcon('twitter') !!}</i>
-                                            <h4 class="fw-600 font-xsss mb-0 mt-0">Social Acount</h4><i
+                                            <h4 class="fw-600 font-xsss mb-0 mt-0">Social Accounts</h4><i
                                                 class=" font-xsss text-grey-500 ms-auto mt-3"
                                                 style="margin-top: -10px">{!! $icons->getIcon('arrow-right') !!}</i>
                                         </a></li>
@@ -44,7 +44,8 @@
 
                                 <div class="nav-caption fw-600 font-xsss text-grey-500 mb-2">Acount</div>
                                 <ul class="list-inline mb-4">
-                                    <li class="list-inline-item d-block  me-0"><a href="password.html"
+                                    <li class="list-inline-item d-block  me-0"><a
+                                            href="{{ route('settings.password_update') }}"
                                             class="pt-2 pb-2 d-flex align-items-center"><i
                                                 class="btn-round-md bg-blue-gradiant text-white  font-md me-3"
                                                 style="margin-top: -10px">{!! $icons->getIcon('inbox') !!}</i>
@@ -57,7 +58,7 @@
                                 <div class="nav-caption fw-600 font-xsss text-grey-500 mb-2">Other</div>
                                 <ul class="list-inline">
                                     <li class="list-inline-item d-block border-bottom me-0"><a
-                                            href="default-notification.html"
+                                            href="{{ route('settings.notifications') }}"
                                             class="pt-2 pb-2 d-flex align-items-center"><i
                                                 class="btn-round-md bg-gold-gradiant text-white font-md me-3"
                                                 style="margin-top: -10px">{!! $icons->getIcon('bell') !!}</i>
@@ -65,7 +66,8 @@
                                                 class=" font-xsss text-grey-500 ms-auto mt-3"
                                                 style="margin-top: -10px">{!! $icons->getIcon('arrow-right') !!}</i>
                                         </a></li>
-                                    <li class="list-inline-item d-block border-bottom me-0"><a href="help-box.html"
+                                    <li class="list-inline-item d-block border-bottom me-0"><a
+                                            href="{{ route('settings.help') }}"
                                             class="pt-2 pb-2 d-flex align-items-center"><i
                                                 class="btn-round-md bg-primary-gradiant text-white  font-md me-3"
                                                 style="margin-top: -10px">{!! $icons->getIcon('help-circle') !!}</i>
@@ -73,7 +75,7 @@
                                                 class=" font-xsss text-grey-500 ms-auto mt-3"
                                                 style="margin-top: -10px">{!! $icons->getIcon('arrow-right') !!}</i>
                                         </a></li>
-                                    <li class="list-inline-item d-block me-0"><a href="#"
+                                    <li class="list-inline-item d-block me-0" wire:click="logout"><a href="#"
                                             class="pt-2 pb-2 d-flex align-items-center"><i
                                                 class="btn-round-md bg-red-gradiant text-white  font-md me-3"
                                                 style="margin-top: -10px">{!! $icons->getIcon('lock') !!}</i>

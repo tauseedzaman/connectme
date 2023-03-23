@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <?php
-    $icons = new \Feather\IconManager();
-    ?>
+<?php
+$icons = new \Feather\IconManager();
+?>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -110,15 +111,6 @@
     @livewireScripts
 
     <script>
-
-        window.onscroll = function(x){
-            if((window.innerHeight + window.scrollY) >= document.body.offsetHeight ){
-                window.livewire.emit("load-more")
-            }
-        }
-
-
-
         window.addEventListener('alert', event => {
             toastr[event.detail.type](event.detail.message,
                 event.detail.title ?? ''), toastr.options = {
@@ -126,6 +118,13 @@
                 "progressBar": true,
             }
         });
+    </script>
+    <script>
+        window.onscroll = function(x) {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                window.livewire.emit("load-more")
+            }
+        }
     </script>
 </body>
 

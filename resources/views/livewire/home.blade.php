@@ -62,8 +62,8 @@
                                         style="margin-top: -10px">{!! $icons->getIcon('more-vertical') !!}</i></a>
                                 <div class="p-4 border-0 shadow-lg dropdown-menu dropdown-menu-end rounded-xxl"
                                     aria-labelledby="dropdownMenu2">
-                                    <div class="p-0 card-body d-flex">
-                                        <i class="feather-bookmark text-grey-500 me-3 font-lg"></i>
+                                    <div class="p-0 card-body d-flex" style="cursor: pointer" wire:click="save({{ $post->id }})">
+                                        <i class=" text-grey-500 me-3 font-lg" style="margin-top: -10px">{!! $icons->getIcon("bookmark") !!}</i>
                                         <h4 class="mt-0 fw-600 text-grey-900 font-xssss me-4">Save Link <span
                                                 class="mt-1 d-block font-xsssss fw-500 lh-3 text-grey-500">Add this to
                                                 your saved items</span></h4>

@@ -22,4 +22,8 @@ class SavedPost extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function post(): BelongsTo
+    {
+        return $this->belongsTo(Post::class, 'post_id');
+    }
 }

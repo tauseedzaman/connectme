@@ -11,6 +11,7 @@ class GroupMember extends Model
     use HasFactory;
     protected $fillable = [
         "group_id",
+        "status",
         "user_id",
     ];
      /**

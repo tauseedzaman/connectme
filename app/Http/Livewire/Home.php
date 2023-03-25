@@ -20,6 +20,7 @@ class Home extends Component
 {
     public $paginate_no = 9;
     public $comment;
+    public $hide_user_list = [];
 
     public $listeners = [
         "load-more" => 'LoadMore'
@@ -224,15 +225,63 @@ class Home extends Component
         ]);
     }
 
+    public function hide_all_from($type, $id)
+    {
+        if ($type == "user") {
+            $friendship = Friend::where("user_id", $id)->orWhere("friend_id", $id)->first();
+            if ($friendship) {
+                $friendship->status = "rejected";
+                $friendship->save();
+            } else {
+                $this->hide_user_list[] = $id;
+            }
+        } elseif ($type == "group") {
+            $member = GroupMember::where(["group_id" => $id, "user_id" => auth()->id()])->first();
+            if ($member) {
+                $member->status = "inactive";
+                $member->save();
+            }
+        } elseif ($type == "page") {
+            $member = PageLike::where(["page_id" => $id, "user_id" => auth()->id()])->first();
+            if ($member) {
+                $member->delete();
+            }
+        }
+
+        $this->dispatchBrowserEvent('alert', [
+            "type" => "success", "message" =>  "Hide all from $type successfully.."
+        ]);
+    }
+
     public function render()
     {
+        // dd(auth()->id());
         $my_pages = PageLike::where("user_id", auth()->id())->pluck("page_id");
         $my_groups = GroupMember::where("user_id", auth()->id())->pluck("group_id");
+        $friend_ids = Friend::where(["user_id" => auth()->id()])->pluck("friend_id");
+
+
+
+        // get posts algo
+        $all_friends_aids = Friend::where(["user_id" => auth()->id(), "status" => "accepted"])->OrWhere(['friend_id' => auth()->id(), "status" => "accepted"])->get(["user_id", "friend_id"])->toArray();
+
+        $filtered_friends_ids = [];
+        foreach ($all_friends_aids as $item) {
+            $filtered_friends_ids[] = ($item['user_id'] == auth()->id() ? $item['friend_id'] : $item['user_id']);
+        }
+
+            $random_users=User::inRandomOrder()->take(100)->pluck("id");
+
+        $posts = Post::whereIn("group_id", $my_groups)->orWhereIn("user_id", $random_users)->OrwhereIn("user_id", $filtered_friends_ids)->OrWhereIn("page_id", $my_pages)->with(["user","page","group"])->latest()->paginate($this->paginate_no);
+
+
         return view('livewire.home', [
-            'posts' => Post::with("user")->latest()->paginate($this->paginate_no),
+            'posts' => $posts,
             'friend_requests' => Friend::where(["friend_id" => auth()->id(), "status" => "pending"])->with("user")->latest()->take(5)->get(),
+            'suggested_friends' => User::whereNotIn("id", $friend_ids)->inRandomOrder()->take(3)->get(),
             "suggested_pages" => Page::whereNotIn("id", $my_pages)->inRandomOrder()->take(3)->get(),
             "suggested_groups" => Group::whereNotIn("id", $my_groups)->inRandomOrder()->take(2)->get()
         ])->extends("layouts.app");
     }
 }
+        // Friend::where("user_id",101)->orWhere("friend_id",101)->where("status","accepted")->pluck("friend_id");

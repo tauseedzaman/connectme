@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Components;
 
 use App\Models\Notification;
 use App\Models\Page;
+use App\Models\PageLike;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -43,6 +44,10 @@ class CreatePage extends Component
                 "name" => $this->name,
                 "location" => $this->location,
                 "type" => $this->type
+            ]);
+            PageLike::create([
+                "user_id" => auth()->id(),
+                "page_id" => $page->id
             ]);
 
             Notification::create([

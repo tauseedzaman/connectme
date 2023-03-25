@@ -53,7 +53,7 @@
                                     @endif
                                     @if ($post->is_page_post)
                                         posted on <a
-                                            href="{{ route('group', $post->page->uuid) }}">{{ $post->page->name }}</a>
+                                            href="{{ route('page', $post->page->uuid) }}">{{ $post->page->name }}</a>
                                     @endif <span
                                         class="mt-1 d-block font-xssss fw-500 lh-3 text-grey-500">{{ $post->created_at->diffForHumans() }}</span>
                                 </h4>
@@ -62,30 +62,51 @@
                                         style="margin-top: -10px">{!! $icons->getIcon('more-vertical') !!}</i></a>
                                 <div class="p-4 border-0 shadow-lg dropdown-menu dropdown-menu-end rounded-xxl"
                                     aria-labelledby="dropdownMenu2">
-                                    <div class="p-0 card-body d-flex" style="cursor: pointer" wire:click="save({{ $post->id }})">
-                                        <i class=" text-grey-500 me-3 font-lg" style="margin-top: -10px">{!! $icons->getIcon("bookmark") !!}</i>
+                                    <div class="p-0 card-body d-flex" style="cursor: pointer"
+                                        wire:click="save({{ $post->id }})">
+                                        <i class=" text-grey-500 me-3 font-lg"
+                                            style="margin-top: -10px">{!! $icons->getIcon('bookmark') !!}</i>
                                         <h4 class="mt-0 fw-600 text-grey-900 font-xssss me-4">Save Link <span
                                                 class="mt-1 d-block font-xsssss fw-500 lh-3 text-grey-500">Add this to
                                                 your saved items</span></h4>
                                     </div>
-                                    <div class="p-0 mt-2 card-body d-flex">
-                                        <i class="feather-alert-circle text-grey-500 me-3 font-lg"></i>
-                                        <h4 class="mt-0 fw-600 text-grey-900 font-xssss me-4">Hide Post <span
-                                                class="mt-1 d-block font-xsssss fw-500 lh-3 text-grey-500">Save to your
-                                                saved items</span></h4>
-                                    </div>
-                                    <div class="p-0 mt-2 card-body d-flex">
-                                        <i class="feather-alert-octagon text-grey-500 me-3 font-lg"></i>
-                                        <h4 class="mt-0 fw-600 text-grey-900 font-xssss me-4">Hide all from Group <span
-                                                class="mt-1 d-block font-xsssss fw-500 lh-3 text-grey-500">Save to your
-                                                saved items</span></h4>
-                                    </div>
-                                    <div class="p-0 mt-2 card-body d-flex">
-                                        <i class="feather-lock text-grey-500 me-3 font-lg"></i>
-                                        <h4 class="mt-0 mb-0 fw-600 text-grey-900 font-xssss me-4">Unfollow Group <span
-                                                class="mt-1 d-block font-xsssss fw-500 lh-3 text-grey-500">Save to your
-                                                saved items</span></h4>
-                                    </div>
+                                    @if ($post->is_group_post)
+                                        <div wire:click="hide_all_from('group',{{ $post->group->id }})"
+                                            class="p-0 mt-2 card-body d-flex" style="cursor: pointer">
+                                            <i class=" text-grey-500 me-3 font-lg"
+                                                style="margin-top: -10px">{!! $icons->getIcon('alert-octagon') !!}</i>
+                                            <h4 class="mt-0 fw-600 text-grey-900 font-xssss me-4">Hide all from
+                                                {{ $post->group->name }}
+                                                <span class="mt-1 d-block font-xsssss fw-500 lh-3 text-grey-500">Save to
+                                                    your
+                                                    saved items</span>
+                                            </h4>
+                                        </div>
+                                    @elseif ($post->is_page_post)
+                                        <div wire:click="hide_all_from('page',{{ $post->page->id }})"
+                                            class="p-0 mt-2 card-body d-flex" style="cursor: pointer">
+                                            <i class=" text-grey-500 me-3 font-lg"
+                                                style="margin-top: -10px">{!! $icons->getIcon('alert-octagon') !!}</i>
+                                            <h4 class="mt-0 fw-600 text-grey-900 font-xssss me-4">Hide all from
+                                                {{ $post->page->name }}
+                                                <span class="mt-1 d-block font-xsssss fw-500 lh-3 text-grey-500">Save to
+                                                    your
+                                                    saved items</span>
+                                            </h4>
+                                        </div>
+                                    @else
+                                        <div wire:click="hide_all_from('user',{{ $post->user->id }})"
+                                            class="p-0 mt-2 card-body d-flex" style="cursor: pointer">
+                                            <i class=" text-grey-500 me-3 font-lg"
+                                                style="margin-top: -10px">{!! $icons->getIcon('alert-octagon') !!}</i>
+                                            <h4 class="mt-0 fw-600 text-grey-900 font-xssss me-4">Hide all from
+                                                {{ $post->user->username }}
+                                                <span class="mt-1 d-block font-xsssss fw-500 lh-3 text-grey-500">Save to
+                                                    your
+                                                    saved items</span>
+                                            </h4>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                             <div class="p-0 card-body me-lg-5">
@@ -269,36 +290,27 @@
                     <div class="p-0 border-0 card w-100 shadow-xss rounded-xxl ">
                         <div class="p-4 mb-0 card-body d-flex align-items-center">
                             <h4 class="mb-0 fw-700 font-xssss text-grey-900">Confirm Friend</h4>
-                            <a href="default-member.html" class="fw-600 ms-auto font-xssss text-primary">See all</a>
+                            <a href="{{ route('explore') }}" class="fw-600 ms-auto font-xssss text-primary">See
+                                all</a>
                         </div>
-                        <div class="p-3 card-body bg-transparent-card d-flex bg-greylight ms-3 me-3 rounded-3">
-                            <figure class="mb-0 avatar me-2"><img src="images/user-7.png" alt="image"
-                                    class="shadow-sm rounded-circle w45"></figure>
-                            <h4 class="mt-2 fw-700 text-grey-900 font-xssss">Anthony Daugloi <span
-                                    class="mt-1 d-block font-xssss fw-500 lh-3 text-grey-500">12 mutual friends</span>
-                            </h4>
-                            <a href="#"
-                                class="mt-2 bg-white btn-round-sm text-grey-900 feather-chevron-right font-xss ms-auto"></a>
-                        </div>
-                        <div class="p-3 m-3 card-body bg-transparent-card d-flex bg-greylight rounded-3"
-                            style="margin-bottom: 0 !important;">
-                            <figure class="mb-0 avatar me-2"><img src="images/user-8.png" alt="image"
-                                    class="shadow-sm rounded-circle w45"></figure>
-                            <h4 class="mt-2 fw-700 text-grey-900 font-xssss"> David Agfree <span
-                                    class="mt-1 d-block font-xssss fw-500 lh-3 text-grey-500">12 mutual friends</span>
-                            </h4>
-                            <a href="#"
-                                class="mt-2 bg-white btn-round-sm text-grey-900 feather-plus font-xss ms-auto"></a>
-                        </div>
-                        <div class="p-3 m-3 card-body bg-transparent-card d-flex bg-greylight rounded-3">
-                            <figure class="mb-0 avatar me-2"><img src="images/user-12.png" alt="image"
-                                    class="shadow-sm rounded-circle w45"></figure>
-                            <h4 class="mt-2 fw-700 text-grey-900 font-xssss">Hugury Daugloi <span
-                                    class="mt-1 d-block font-xssss fw-500 lh-3 text-grey-500">12 mutual friends</span>
-                            </h4>
-                            <a href="#"
-                                class="mt-2 bg-white btn-round-sm text-grey-900 feather-plus font-xss ms-auto"></a>
-                        </div>
+
+                        @foreach ($suggested_friends as $user)
+                            <div
+                                class="p-3 mb-3 card-body bg-transparent-card d-flex bg-greylight ms-3 me-3 rounded-3">
+                                <figure class="mb-0 avatar me-2"><img
+                                        src="{{ asset('storage') . '/' . $user->profile }}" alt="image"
+                                        class="shadow-sm rounded-circle w45"></figure>
+                                <h4 class="mt-2 fw-700 text-grey-900 font-xssss">
+                                    {{ $user->first_name . ' ' . $user->last_name }} <span
+                                        class="mt-1 d-block font-xssss fw-500 lh-3 text-grey-500">{{ $user->mutual_friends() }}
+                                        mutual
+                                        friends</span>
+                                </h4>
+                                <a href="{{ route('user', $user->uuid) }}"
+                                    class="mt-2 bg-white btn-round-sm text-grey-900  font-xss ms-auto"
+                                    style="margint-top:-10px">{!! $icons->getIcon('chevron-right') !!}</a>
+                            </div>
+                        @endforeach
 
                     </div>
 

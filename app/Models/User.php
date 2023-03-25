@@ -60,6 +60,15 @@ class User extends Authenticatable
         return (Friend::where(["user_id" => $this->id])->orWhere("friend_id", $this->id)->first()->status ?? "");
     }
 
+
+    public function mutual_friends()
+    {
+        $my_friend_friends = Friend::where("user_id", $this->id)->OrWhere("friend_id", $this->id)->pluck("id")->toArray();
+        $my_friend = Friend::where("user_id", auth()->id())->OrWhere("friend_id", auth()->id())->pluck("id")->toArray();
+        return count(array_intersect($my_friend, $my_friend_friends));
+    }
+
+
     /**
      * Get all of the posts for the User
      *

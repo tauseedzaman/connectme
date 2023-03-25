@@ -3,11 +3,13 @@
 namespace App\Http\Livewire;
 
 use App\Models\Group;
+use App\Models\GroupMember;
 use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Str;
+
 class CreateGroup extends Component
 {
     use WithFileUploads;
@@ -41,6 +43,10 @@ class CreateGroup extends Component
                 "name" => $this->name,
                 "location" => $this->location,
                 "type" => $this->type
+            ]);
+            GroupMember::create([
+                "user_id" => auth()->id(),
+                "group_id" => $page->id
             ]);
 
             Notification::create([

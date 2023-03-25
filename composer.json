@@ -12,6 +12,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^2.12",
+        "munafio/chatify": "^1.6",
         "pixelrobin/php-feather": "^2.0",
         "twilio/sdk": "^6.44"
     },

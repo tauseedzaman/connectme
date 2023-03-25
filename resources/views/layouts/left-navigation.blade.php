@@ -34,13 +34,9 @@
                     <li><a href="{{ route('settings') }}" class="h-auto pt-2 pb-2 nav-content-bttn open-font"><i
                                 class="font-sm  me-3 text-grey-500"
                                 style="margin-top: -10px">{!! $icons->getIcon('settings') !!}</i><span>Settings</span></a></li>
-                    <li><a href="default-analytics.html" class="h-auto pt-2 pb-2 nav-content-bttn open-font"><i
-                                class="font-sm -chart me-3 text-grey-500"
-                                style="margin-top: -10px">{!! $icons->getIcon('pie-chart') !!}</i><span>Analytics</span></a></li>
-                    <li><a href="default-message.html" class="h-auto pt-2 pb-2 nav-content-bttn open-font"><i
+                    <li><a href="{{ url("chat") }}" class="h-auto pt-2 pb-2 nav-content-bttn open-font"><i
                                 class="font-sm -square me-3 text-grey-500"
-                                style="margin-top: -10px">{!! $icons->getIcon('message-circle') !!}</i><span>Chat</span><span
-                                class="mt-0 circle-count bg-warning">23</span></a></li>
+                                style="margin-top: -10px">{!! $icons->getIcon('message-circle') !!}</i><span>Chat</span></a></li>
                 </ul>
             </div>
         </div>

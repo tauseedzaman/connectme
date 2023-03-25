@@ -154,7 +154,7 @@
                         <div class="p-4 mb-3 border-0 card w-100 shadow-xss rounded-xxl">
                             <div class="p-0 card-body d-flex">
                                 <figure class="avatar me-3"><img
-                                        src="{{ asset('storage') . '/' . $post->page->icon ?? 'images/user-7.png' }}"
+                                        src="{{ asset('storage') . '/' . $pagee->icon ?? 'images/user-7.png' }}"
                                         alt="image" class="shadow-sm rounded-circle w45"></figure>
                                 <h4 class="mt-1 fw-700 text-grey-900 font-xssss">{{ $post->user->username }} <span
                                         class="mt-1 d-block font-xssss fw-500 lh-3 text-grey-500">{{ $post->created_at->diffForHumans() }}</span>

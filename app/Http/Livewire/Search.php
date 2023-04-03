@@ -3,29 +3,29 @@
 namespace App\Http\Livewire;
 
 use App\Models\Comment;
-use App\Models\Group as ModelsGroup;
 use App\Models\Like;
 use App\Models\Post;
-use App\Models\PostMedia;
-use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\WithPagination;
 
-class Group extends Component
+class Search extends Component
 {
-    public $uuid;
-    public $paginator = 10;
 
+    public $search;
 
+    public $paginate_no = 9;
     public $comment;
+    public $hide_user_list = [];
 
     public $listeners = [
         "load-more" => 'LoadMore'
     ];
 
+    use WithPagination;
     public function LoadMore()
     {
-        $this->paginator = $this->paginator + 3;
+        $this->paginate_no = $this->paginate_no + 3;
     }
 
     public function saveComment($post_id)
@@ -80,23 +80,15 @@ class Group extends Component
             throw $th;
         }
     }
-
-    public function mount($uuid)
+    public function mount()
     {
-        $this->uuid = $uuid;
+        $this->search = request()->get("query");
     }
-
     public function render()
     {
-        $group = ModelsGroup::where("uuid", $this->uuid)->firstOrFail();
-        $posts_ids = Post::where("status","published")->where("group_id", $group->id)->pluck("id");
-        $post_media = PostMedia::whereIn("post_id", $posts_ids)->where("file_type", "image")->get();
-        $posts = Post::where("group_id", $group->id)->latest()->paginate($this->paginator);
-
-        return view('livewire.group', [
-            "group" => $group,
-            "posts" => $posts,
-            "group_images" => $post_media
+        $posts = Post::where("content", "like", "%" . $this->search . "%")->paginate($this->paginate_no);
+        return view('livewire.search', [
+            "posts" => $posts
         ])->extends("layouts.app");
     }
 }

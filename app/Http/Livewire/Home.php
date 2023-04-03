@@ -93,8 +93,10 @@ class Home extends Component
             $req = Friend::where([
                 "user_id" => $id,
                 "friend_id" => auth()->id(),
+                "status" => "pending"
             ])->first();
             $req->status = "accepted";
+            $req->accepted_at=now();
             $req->save();
             Notification::create([
                 "type" => "friend_accepted",
@@ -103,12 +105,6 @@ class Home extends Component
                 "url" => "#",
             ]);
 
-            // Notification::create([
-            //     "type" => "friend_accepted",
-            //     "user_id" => $user->id,
-            //     "message" => " accepted your friend request" . $user->username,
-            //     "url" => "#",
-            // ]);
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -271,8 +267,8 @@ class Home extends Component
         }
 
             $random_users=User::inRandomOrder()->take(100)->pluck("id");
-
-        $posts = Post::whereIn("group_id", $my_groups)->orWhereIn("user_id", $random_users)->OrwhereIn("user_id", $filtered_friends_ids)->OrWhereIn("page_id", $my_pages)->with(["user","page","group"])->latest()->paginate($this->paginate_no);
+            // whereIn("group_id", $my_groups)->orWhereIn("user_id", $random_users)->OrwhereIn("user_id", $filtered_friends_ids)->OrWhereIn("page_id", $my_pages)->with(["user","page","group"])->
+        $posts = Post::where("status","published")->latest()->paginate($this->paginate_no);
 
 
         return view('livewire.home', [

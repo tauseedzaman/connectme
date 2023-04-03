@@ -10,6 +10,7 @@ use App\Http\Livewire\Page;
 use App\Http\Livewire\Pages;
 use App\Http\Livewire\Peoples;
 use App\Http\Livewire\Profile;
+use App\Http\Livewire\Search;
 use App\Http\Livewire\Settings\AccountInformaiton;
 use App\Http\Livewire\Settings\Help;
 use App\Http\Livewire\Settings\Notifications;
@@ -18,23 +19,19 @@ use App\Http\Livewire\Settings\SavedPosts;
 use App\Http\Livewire\Settings\Setting;
 use App\Http\Livewire\Settings\Socials;
 use App\Http\Livewire\SinglePost;
+use App\Http\Livewire\Test;
 // use App\Http\Livewire\Socials;
 use App\Http\Livewire\User;
 use App\Http\Livewire\VideoPosts;
 use App\Models\Post;
+use App\Models\User as ModelsUser;
+use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Benchmark;
+use Illuminate\Support\Env;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+
+
 
 
 
@@ -42,6 +39,7 @@ Route::middleware(["auth", "verified", 'VerifiedUser'])->group(function () {
     Route::get('/', Home::class)->name("home");
     Route::get('/videos', VideoPosts::class)->name("videos");
     Route::get('/pages', Pages::class)->name("pages");
+    Route::get('/search', Search::class)->name("search");
     Route::get('/pages/{uuid}', Page::class)->name("page");
     Route::get('/page/create', CreatePage::class)->name("create-page");
 
@@ -61,7 +59,6 @@ Route::middleware(["auth", "verified", 'VerifiedUser'])->group(function () {
         Route::get('/reset-password', PasswordUpdate::class)->name("settings.password_update");
         Route::get('/notifcation', Notifications::class)->name("settings.notifications");
         Route::get('/help', Help::class)->name("settings.help");
-
     });
 
     Route::get('/explore', Peoples::class)->name("explore");

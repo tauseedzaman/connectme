@@ -3,7 +3,9 @@
 namespace App\Http\Livewire;
 
 use App\Models\Comment;
+use App\Models\Friend;
 use App\Models\Like;
+use App\Models\Notification;
 use App\Models\Post;
 use App\Models\PostMedia;
 use App\Models\User as ModelsUser;
@@ -26,9 +28,59 @@ class User extends Component
         $this->paginate_no = $this->paginate_no + 3;
     }
 
+
+    public function addfriend($id)
+    {
+        $user = ModelsUser::where("uuid", $id)->first();
+
+        DB::beginTransaction();
+        try {
+            Friend::create([
+                "user_id" => auth()->id(),
+                "friend_id" => $user->id,
+            ]);
+            Notification::create([
+                "type" => "friend_request",
+                "user_id" => $user->id,
+                "message" => auth()->user()->username . " send you friend request",
+                "url" => "#",
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+        $this->dispatchBrowserEvent('alert', [
+            "type" => "success", "message" => "friend request send to " . $user->username
+        ]);
+    }
+    public function removefriend($id)
+    {
+
+        DB::beginTransaction();
+        try {
+            $req = Friend::findOrFail($id);
+            $temp = $req->user_id == auth()->id() ? $req->friend_id : $req->user_id;
+            Notification::create([
+                "type" => "friend_request",
+                "user_id" => $temp,
+                "message" => auth()->user()->username . " canceled friend request",
+                "url" => "#",
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            throw $th;
+        }
+        $this->dispatchBrowserEvent('alert', [
+            "type" => "success", "message" => "friend request canceled from " . ModelsUser::find($temp)->username
+        ]);
+    }
+
+
     public function toggle()
     {
-        $this->loader=!$this->loader;
+        $this->loader = !$this->loader;
     }
 
     public function saveComment($post_id)
@@ -93,7 +145,7 @@ class User extends Component
     public function render()
     {
         $user = ModelsUser::where("uuid", $this->uuid)->firstOrFail();
-        $posts_ids = Post::where("user_id", $user->id)->pluck("id");
+        $posts_ids = Post::where(["user_id" => $user->id, "status" => "published"])->pluck("id");
         if ($this->loader == 1) {
             $posts = Post::where("user_id", $user->id)->get();
             $post_media = PostMedia::whereIn("post_id", $posts_ids)->where("file_type", "image")->get();

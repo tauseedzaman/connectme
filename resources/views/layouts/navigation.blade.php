@@ -19,14 +19,14 @@
         <button class="nav-menu me-0 ms-2"></button>
     </div>
 
-<link href="
+    <link href="
 https://cdn.jsdelivr.net/npm/ti-icons@0.1.2/css/themify-icons.min.css
 " rel="stylesheet">
 
-    <form action="#" class="float-left header-search">
+    <form action="{{ route('search') }}" method="GET" class="float-left header-search">
         <div class="mb-0 form-group icon-input">
             <i class=" font-sm text-grey-400" style="margin-top: -10px">{!! $icons->getIcon('search') !!}</i>
-            <input type="text" placeholder="Start typing to search.."
+            <input type="text" name="query" placeholder="Start typing to search.."
                 class="pt-2 pb-2 border-0 bg-grey lh-32 ps-5 pe-3 font-xssss fw-500 rounded-xl w350 theme-dark-bg">
         </div>
     </form>
@@ -39,7 +39,7 @@ https://cdn.jsdelivr.net/npm/ti-icons@0.1.2/css/themify-icons.min.css
     <a href="{{ route('videos') }}" class="   p-2 text-center ms-0 menu-icon center-menu-icon"><i
             class="{{ request()->route()->getName() == 'videos'? 'bg-primary': '' }} font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"
             style="margin-top: -10px">{!! $icons->getIcon('video') !!}</i></a>
-    <a href="#" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i
+    <a href="{{ route('user', auth()->user()->uuid) }} " class="p-2 text-center ms-0 menu-icon center-menu-icon"><i
             class=" font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"
             style="margin-top: -10px">{!! $icons->getIcon('user') !!}</i></a>
 
@@ -69,12 +69,12 @@ https://cdn.jsdelivr.net/npm/ti-icons@0.1.2/css/themify-icons.min.css
 
 
     </div>
-    <a href="#" class="p-2 text-center ms-3 menu-icon chat-active-btn"><i class="text-current font-xl"
+    <a href="{{ route('chat') }}" class="p-2 text-center ms-3"><i class="text-current font-xl"
             style="margin-top: -10px">{!! $icons->getIcon('message-circle') !!}</i></a>
     <div class="p-2 text-center cursor-pointer ms-3 position-relative dropdown-menu-icon menu-icon">
         <i class="text-current animation-spin d-inline-block font-xl"
             style="margin-top: -10px">{!! $icons->getIcon('settings') !!}</i>
-        @livewire("menu-setting")
+        @livewire('menu-setting')
     </div>
 
 

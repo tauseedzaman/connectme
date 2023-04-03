@@ -16,7 +16,8 @@ return new class extends Migration
             $table->uuid("uuid");
             $table->foreignId("user_id")->constrained()->cascadeOnDelete();
             $table->longText("content");
-            $table->enum("status",["published","private"])->default("published");
+            $table->boolean("is_public")->default(1);
+            $table->enum("status", ["published", "pending", "rejected"])->default("pending");
             $table->unsignedBigInteger("likes")->default(0);
             $table->unsignedBigInteger("comments")->default(0);
             $table->boolean("is_page_post")->default(0);

@@ -39,15 +39,15 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        for ($i = 0; $i < 100; $i++) {
-            Post::create([
-                "uuid" => Str::uuid(),
-                "user_id" => User::InRandomOrder()->first()->id,
-                "content" => fake()->sentence(rand(10, 50)),
-                "likes" => rand(200, 10000),
-                "comments" => rand(200, 10000),
-            ]);
-        }
+        // for ($i = 0; $i < 100; $i++) {
+        //     Post::create([
+        //         "uuid" => Str::uuid(),
+        //         "user_id" => User::InRandomOrder()->first()->id,
+        //         "content" => fake()->sentence(rand(10, 50)),
+        //         "likes" => rand(200, 10000),
+        //         "comments" => rand(200, 10000),
+        //     ]);
+        // }
         for ($i = 0; $i < 100; $i++) {
             Page::create([
                 "uuid" => Str::uuid(),
@@ -116,35 +116,37 @@ class DatabaseSeeder extends Seeder
             "members" => rand(200, 10000),
         ]);
 
-        for ($i = 0; $i < 100; $i++) {
-            Post::create([
-                "uuid" => Str::uuid(),
-                "user_id" => $user->id,
-                "content" => fake()->sentence(rand(10, 50)),
-                "page_id" => $page->id,
-                'is_page_post' => 1,
-                "likes" => rand(200, 10000),
-                "comments" => rand(200, 10000),
-            ]);
-        }
+        // for ($i = 0; $i < 100; $i++) {
+        //     Post::create([
+        //         "uuid" => Str::uuid(),
+        //         "user_id" => $user->id,
+        //         "content" => fake()->sentence(rand(10, 50)),
+        //         "page_id" => $page->id,
+        //         'is_page_post' => 1,
+        //         'status' => 'pending',
+        //         "likes" => rand(200, 10000),
+        //         "comments" => rand(200, 10000),
+        //     ]);
+        // }
 
-        for ($i = 0; $i < 100; $i++) {
-            Post::create([
-                "uuid" => Str::uuid(),
-                "user_id" => $user->id,
-                "content" => fake()->sentence(rand(10, 50)),
-                "group_id" => $group->id,
-                'is_group_post' => 1,
-                "likes" => rand(200, 10000),
-                "comments" => rand(200, 10000),
-            ]);
-        }
+        // for ($i = 0; $i < 100; $i++) {
+        //     Post::create([
+        //         "uuid" => Str::uuid(),
+        //         "user_id" => $user->id,
+        //         "content" => fake()->sentence(rand(10, 50)),
+        //         "group_id" => $group->id,
+        //         'status' => 'pending',
+        //         'is_group_post' => 1,
+        //         "likes" => rand(200, 10000),
+        //         "comments" => rand(200, 10000),
+        //     ]);
+        // }
 
 
 
         // sed faq or help disk
         for ($i = 0; $i < 100; $i++) {
-            App\Models\Faq::create([
+            Faq::create([
                 "question" => fake()->sentence(),
                 "answer" => fake()->paragraph(),
             ]);

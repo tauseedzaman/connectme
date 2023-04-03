@@ -31,7 +31,8 @@ class SinglePost extends Component
             Comment::firstOrCreate([
                 "post_id" => $post_id,
                 "comment" => $this->comment,
-                "user_id" => auth()->id()
+                "user_id" => auth()->id(),
+                'status' => "pending"
             ]);
             $post = Post::findOrFail($post_id);
             $post->comments += 1;
@@ -76,7 +77,9 @@ class SinglePost extends Component
     public function render()
     {
         $user = User::where("uuid", $this->user_uuid)->first();
-        $post=Post::where(["user_id" => $user->id, 'uuid' => $this->post_uuid])->with(["user", "commentss"])->first();
+        $post = Post::where(["user_id" => $user->id, 'uuid' => $this->post_uuid])->with(["user", 'commentss' => function ($query) {
+            $query->where('status', 'published');
+        }])->first();
         return view('livewire.single-post', [
             'post' => $post
         ])->extends("layouts.app");

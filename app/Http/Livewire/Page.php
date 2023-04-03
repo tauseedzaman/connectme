@@ -154,15 +154,15 @@ class Page extends Component
     public function render()
     {
         $page = ModelsPage::where("uuid", $this->uuid)->firstOrFail();
-        $posts_ids = Post::where("page_id", $page->id)->pluck("id");
+        $posts_ids = Post::where("page_id", $page->id)->where("status", "published")->pluck("id");
         $posts = Post::where("page_id", $page->id)->paginate($this->paginate_no);
         $post_media = PostMedia::whereIn("post_id", $posts_ids)->where("file_type", "image")->take(10);
         // dd($page);
 
         return view('livewire.page', [
-            "posts"=>$posts,
-            "pagee"=>$page,
-            "post_media"=>$post_media,
+            "posts" => $posts,
+            "pagee" => $page,
+            "post_media" => $post_media,
         ])->extends("layouts.app");
     }
 }

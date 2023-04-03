@@ -15,6 +15,7 @@ class Post extends Model
         "user_id",
         "content",
         "status",
+        'is_public',
         "likes",
         "comments",
         "is_page_post",

@@ -15,8 +15,8 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          sshpass -p '${{ secrets.DEPLOY_HOST }}' ssh -o StrictHostKeyChecking=no -p ${{ secrets.DEPLOY_PORT }} '${{ secrets.DEPLOY_USERNAME }}@${{ secrets.DEPLOY_HOST }}' <<EOF
-          cd '${{ secrets.DEPLOY_PATH }}'
+          sshpass -p '${{ vars.DEPLOY_HOST }}' ssh -o StrictHostKeyChecking=no -p ${{ vars.DEPLOY_PORT }} '${{ vars.DEPLOY_USERNAME }}@${{ vars.DEPLOY_HOST }}' <<EOF
+          cd '${{ vars.DEPLOY_PATH }}'
 
           # public repo
           git pull https://github.com/tauseedzaman/connectme.git

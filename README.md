@@ -106,3 +106,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For any issues or questions, please [open an issue on GitHub](https://github.com/tauseedzaman/connectme/issues).
 
 Enjoy using ConnectMe!
+
+[@tauseedzaman](https://github.com/tauseedzaman)
